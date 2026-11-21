@@ -502,6 +502,126 @@
     .card h2 { font-size: 18.5px; margin-bottom: 8px; color: #f8fafc; }
     .card p { font-size: 14px; color: var(--text-secondary); line-height: 1.55; margin-bottom: 18px; }
 
+    /* Industrial Hazard PUSH Dome Button (Reference Effect) */
+    .hazard-push-wrap {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 6px 0 2px;
+    }
+
+    .hazard-base {
+      position: relative;
+      background: repeating-linear-gradient(
+        -45deg,
+        #facc15,
+        #facc15 11px,
+        #18181b 11px,
+        #18181b 22px
+      );
+      padding: 9px 14px;
+      border-radius: 18px;
+      border: 2px solid #eab308;
+      box-shadow:
+        0 8px 0 #713f12,
+        0 14px 24px rgba(0, 0, 0, 0.65);
+    }
+
+    .hazard-collar {
+      background: linear-gradient(180deg, #52525b, #18181b);
+      padding: 6px 10px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.25);
+    }
+
+    .hazard-dome-btn {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 146px;
+      height: 62px;
+      border-radius: 999px;
+      border: 2px solid #fca5a5;
+      background: radial-gradient(circle at 50% 22%, #ef4444 0%, #b91c1c 62%, #7f1d1d 100%);
+      color: #fecaca;
+      font-size: 17px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px rgba(254, 202, 202, 0.8), 0 2px 3px rgba(0, 0, 0, 0.8);
+      box-shadow:
+        0 6px 0 #450a0a,
+        0 10px 18px rgba(0, 0, 0, 0.7),
+        inset 0 3px 6px rgba(255, 255, 255, 0.35),
+        0 0 22px rgba(239, 68, 68, 0.45);
+      cursor: pointer;
+      transition: transform 0.09s ease, box-shadow 0.09s ease, filter 0.15s ease;
+    }
+
+    .hazard-dome-btn:hover {
+      filter: brightness(1.08);
+      box-shadow:
+        0 6px 0 #450a0a,
+        0 10px 22px rgba(239, 68, 68, 0.55),
+        inset 0 3px 7px rgba(255, 255, 255, 0.45),
+        0 0 28px rgba(244, 63, 94, 0.65);
+    }
+
+    .hazard-dome-btn:active,
+    .hazard-dome-btn.pressed {
+      transform: translateY(5px);
+      box-shadow:
+        0 1px 0 #450a0a,
+        0 4px 10px rgba(0, 0, 0, 0.7),
+        inset 0 3px 8px rgba(0, 0, 0, 0.55),
+        0 0 32px rgba(244, 63, 94, 0.8);
+    }
+
+    /* Concentric Radar Ripple Ping on Top-Right of Dome */
+    .dome-radar-ping {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      width: 24px;
+      height: 24px;
+      pointer-events: none;
+      z-index: 4;
+    }
+
+    .dome-radar-ping span {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 2px solid #f87171;
+      opacity: 0;
+      animation: domePulseRing 1.9s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+    }
+
+    .dome-radar-ping span:nth-child(2) {
+      animation-delay: 0.65s;
+    }
+
+    .dome-radar-ping::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 6px;
+      height: 6px;
+      margin: -3px 0 0 -3px;
+      border-radius: 50%;
+      background: #fca5a5;
+      box-shadow: 0 0 8px #ef4444;
+    }
+
+    @keyframes domePulseRing {
+      0% { transform: scale(0.35); opacity: 0.95; }
+      100% { transform: scale(1.9); opacity: 0; }
+    }
+
     .mini-progress {
       margin-bottom: 16px;
     }
@@ -545,7 +665,6 @@
     .action-btn:active { transform: scale(0.97); }
 
     .btn-violet { background: linear-gradient(135deg, #a855f7, #7e22ce); box-shadow: 0 4px 16px rgba(168, 85, 247, 0.35); }
-    .btn-red-hazard { background: linear-gradient(135deg, #f43f5e, #be123c); box-shadow: 0 4px 18px rgba(244, 63, 94, 0.45); }
     .btn-lime { background: linear-gradient(135deg, #84cc16, #4d7c0f); color: #05070e; box-shadow: 0 4px 16px rgba(132, 204, 22, 0.35); }
     .btn-amber { background: linear-gradient(135deg, #f59e0b, #ea580c); box-shadow: 0 4px 16px rgba(245, 158, 11, 0.35); }
 
@@ -1049,7 +1168,7 @@
             <button type="button" class="action-btn btn-violet" id="discoBtn">Activate Zero-G Party</button>
           </div>
 
-          <!-- Card 3: Forbidden Red Button (Full-Page Shake + Shockwave) -->
+          <!-- Card 3: Forbidden Red Button (Industrial Hazard PUSH Dome + Full-Page Shake) -->
           <div class="card tilt-card">
             <div>
               <span class="card-badge">MAXIMUM HAZARD</span>
@@ -1057,7 +1176,17 @@
               <h2>The Forbidden Red Button</h2>
               <p>Seriously, don't touch this. We don't even know what the previous developer wired it to.</p>
             </div>
-            <button type="button" class="action-btn btn-red-hazard" id="panicBtn">DO NOT PRESS</button>
+            <div class="hazard-push-wrap">
+              <div class="hazard-base">
+                <div class="dome-radar-ping" aria-hidden="true">
+                  <span></span>
+                  <span></span>
+                </div>
+                <div class="hazard-collar">
+                  <button type="button" class="hazard-dome-btn" id="panicBtn" aria-label="Forbidden Red PUSH Button">PUSH</button>
+                </div>
+              </div>
+            </div>
           </div>
 
           <!-- Card 4: Neon Core Hunter Mini-Game -->
@@ -1623,7 +1752,8 @@
         showToast(isStrobe ? "🕺 Zero-G & neon strobe engaged!" : "🛬 Gravity restored.");
       });
 
-      // 10. Forbidden Red Button — Full-Page Seismic Shake + Shockwave
+      // 10. Forbidden Red Button — PUSH Dome Depress + Full-Page Seismic Shake + Shockwave
+      const panicBtn = document.getElementById("panicBtn");
       let panicClicks = 0;
       const panicMessages = [
         "⚠️ WARNING: You weren't supposed to press that!",
@@ -1638,6 +1768,7 @@
         const statusEl = document.getElementById("funnyStatus");
 
         playTone(135, "sawtooth", 0.3, 0.09);
+        panicBtn?.classList.add("pressed");
         document.body.classList.add("shake-active");
         wrapper?.classList.add("mega-shake");
         spawnShockwave(clientX, clientY, "#f43f5e");
@@ -1649,12 +1780,13 @@
         panicClicks++;
 
         setTimeout(() => {
+          panicBtn?.classList.remove("pressed");
           wrapper?.classList.remove("mega-shake");
           document.body.classList.remove("shake-active");
         }, 1250);
       }
 
-      document.getElementById("panicBtn")?.addEventListener("click", (e) => {
+      panicBtn?.addEventListener("click", (e) => {
         triggerPanicShake(e.clientX, e.clientY);
       });
 
