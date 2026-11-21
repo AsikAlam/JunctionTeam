@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>nJunctionTeam — Pro Command HQ</title>
+  <title>JunctionTeam — Heavy FX Command Deck</title>
   <style>
     * {
       box-sizing: border-box;
@@ -13,124 +13,118 @@
     }
 
     :root {
-      --bg-deep: #060913;
-      --surface: rgba(15, 23, 42, 0.68);
-      --surface-hover: rgba(30, 41, 59, 0.82);
-      --border: rgba(148, 163, 184, 0.16);
-      --cyan: #38bdf8;
-      --purple: #a855f7;
-      --pink: #f472b6;
-      --emerald: #10b981;
-      --amber: #f59e0b;
-      --rose: #f43f5e;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
+      --bg-void: #05070e;
+      --panel-bg: rgba(13, 19, 36, 0.78);
+      --lime: #a3e635;
+      --cyan: #22d3ee;
+      --violet: #a855f7;
+      --magenta: #ec4899;
+      --crimson: #f43f5e;
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
     }
 
     body {
-      background: var(--bg-deep);
-      color: var(--text-main);
+      background: var(--bg-void);
+      color: var(--text-primary);
       min-height: 100vh;
       overflow-x: hidden;
       position: relative;
     }
 
-    /* Subtle Cyber Grid Overlay */
-    .cyber-grid {
+    /* Animated Aurora Mesh & Dot Matrix */
+    .aurora-backdrop {
       position: fixed;
       inset: 0;
-      background-image: 
-        linear-gradient(to right, rgba(56, 189, 248, 0.04) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(56, 189, 248, 0.04) 1px, transparent 1px);
-      background-size: 44px 44px;
-      mask-image: radial-gradient(circle at 50% 30%, black 45%, transparent 95%);
+      background:
+        radial-gradient(circle at 15% 20%, rgba(168, 85, 247, 0.24), transparent 42%),
+        radial-gradient(circle at 85% 15%, rgba(34, 211, 238, 0.2), transparent 45%),
+        radial-gradient(circle at 50% 85%, rgba(236, 72, 153, 0.16), transparent 48%);
       pointer-events: none;
       z-index: 0;
     }
 
-    /* Interactive Constellation Background Canvas */
-    #networkCanvas {
+    .dot-matrix {
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(rgba(148, 163, 184, 0.14) 1px, transparent 1px);
+      background-size: 26px 26px;
+      mask-image: linear-gradient(to bottom, black 20%, transparent 95%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Full-Screen FX Canvas (Shockwaves, Sparks & Confetti) */
+    #fxCanvas {
       position: fixed;
       inset: 0;
       width: 100%;
       height: 100%;
       pointer-events: none;
-      z-index: 1;
+      z-index: 998;
     }
 
-    /* Animated Ambient Background Orbs */
-    .bg-orb {
-      position: fixed;
-      border-radius: 50%;
-      filter: blur(110px);
-      z-index: 0;
-      opacity: 0.35;
-      animation: floatOrb 14s infinite alternate ease-in-out;
-      pointer-events: none;
-    }
-    .orb-1 { width: 440px; height: 440px; background: #2563eb; top: -100px; left: -100px; }
-    .orb-2 { width: 400px; height: 400px; background: #9333ea; bottom: -80px; right: -80px; animation-delay: -5s; }
-    .orb-3 { width: 300px; height: 300px; background: #06b6d4; top: 45%; left: 45%; animation-delay: -9s; }
-
-    @keyframes floatOrb {
-      0% { transform: translate(0, 0) scale(1); }
-      100% { transform: translate(70px, -50px) scale(1.2); }
-    }
-
-    /* Confetti Canvas */
-    #confettiCanvas {
+    /* Chromatic Glitch Overlay Flash during Shake */
+    .glitch-flash {
       position: fixed;
       inset: 0;
-      width: 100%;
-      height: 100%;
+      background: linear-gradient(90deg, rgba(244, 63, 94, 0.16), transparent 50%, rgba(34, 211, 238, 0.16));
+      opacity: 0;
       pointer-events: none;
-      z-index: 999;
+      z-index: 990;
+      mix-blend-mode: screen;
+    }
+    body.shake-active .glitch-flash {
+      animation: glitchPulse 0.16s infinite alternate;
+    }
+    @keyframes glitchPulse {
+      0% { opacity: 0.9; transform: translateX(-5px); }
+      100% { opacity: 0.35; transform: translateX(5px); }
     }
 
-    /* Header & Top Navigation */
+    /* Top Header */
     header {
       position: sticky;
       top: 0;
-      z-index: 50;
+      z-index: 60;
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 14px;
       padding: 12px 26px;
-      background: rgba(9, 13, 24, 0.82);
-      backdrop-filter: blur(18px);
-      border-bottom: 1px solid rgba(56, 189, 248, 0.16);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      background: rgba(8, 12, 24, 0.86);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(163, 230, 53, 0.2);
     }
 
-    .logo {
-      font-weight: 800;
-      font-size: 19px;
-      background: linear-gradient(90deg, #38bdf8, #a855f7, #f472b6);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    .brand-mark {
       display: flex;
       align-items: center;
-      gap: 10px;
-      white-space: nowrap;
+      gap: 11px;
+      font-weight: 800;
+      font-size: 19px;
+      background: linear-gradient(90deg, #a3e635, #22d3ee, #e879f9);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
       cursor: pointer;
+      white-space: nowrap;
     }
 
-    .logo-svg {
-      width: 30px;
-      height: 30px;
+    .brand-badge-svg {
+      width: 34px;
+      height: 34px;
       flex-shrink: 0;
-      filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.6));
+      filter: drop-shadow(0 0 10px rgba(163, 230, 53, 0.45));
     }
 
     .top-nav {
       display: flex;
       align-items: center;
-      gap: 5px;
-      background: rgba(15, 23, 42, 0.7);
+      gap: 6px;
+      background: rgba(15, 23, 42, 0.72);
       padding: 4px;
-      border-radius: 13px;
-      border: 1px solid var(--border);
+      border-radius: 14px;
+      border: 1px solid rgba(148, 163, 184, 0.16);
     }
 
     .nav-btn {
@@ -138,60 +132,56 @@
       border: 1px solid transparent;
       color: #cbd5e1;
       padding: 7px 12px;
-      border-radius: 9px;
+      border-radius: 10px;
       font-size: 13px;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.22s ease;
+      transition: all 0.2s ease;
       white-space: nowrap;
     }
 
     .nav-btn:hover {
-      color: #ffffff;
-      background: rgba(51, 65, 85, 0.55);
+      color: #fff;
+      background: rgba(51, 65, 85, 0.5);
     }
 
     .nav-btn.active {
-      color: #ffffff;
-      background: linear-gradient(135deg, rgba(56, 189, 248, 0.28), rgba(168, 85, 247, 0.32));
-      border-color: rgba(56, 189, 248, 0.5);
-      box-shadow: 0 4px 15px rgba(56, 189, 248, 0.2);
+      color: #05070e;
+      background: linear-gradient(135deg, #a3e635, #22d3ee);
+      font-weight: 700;
+      box-shadow: 0 0 18px rgba(163, 230, 53, 0.35);
     }
 
     .header-actions {
       display: flex;
-      gap: 8px;
       align-items: center;
+      gap: 8px;
       flex-shrink: 0;
     }
 
-    .btn-icon {
+    .btn-tool {
       background: rgba(30, 41, 59, 0.75);
-      border: 1px solid var(--border);
-      color: #cbd5e1;
+      border: 1px solid rgba(148, 163, 184, 0.24);
+      color: #e2e8f0;
       padding: 7px 11px;
       border-radius: 10px;
       font-size: 12.5px;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: 0.2s;
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
     }
+    .btn-tool:hover { border-color: var(--lime); color: #fff; }
 
-    .btn-icon:hover {
-      border-color: var(--cyan);
-      color: #fff;
-    }
-
-    .kbd-hint {
-      font-size: 10.5px;
-      background: rgba(15, 23, 42, 0.9);
+    .kbd-tag {
+      font-size: 10px;
       padding: 2px 5px;
-      border-radius: 4px;
-      color: var(--cyan);
-      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 5px;
+      background: rgba(163, 230, 53, 0.15);
+      color: var(--lime);
+      border: 1px solid rgba(163, 230, 53, 0.35);
     }
 
     .btn-pill {
@@ -199,36 +189,31 @@
       padding: 8px 14px;
       border-radius: 999px;
       font-size: 12.5px;
-      font-weight: 700;
+      font-weight: 800;
       cursor: pointer;
       transition: transform 0.2s, box-shadow 0.2s;
       white-space: nowrap;
     }
-
     .btn-pill:hover { transform: translateY(-2px); }
 
-    .btn-party {
-      background: linear-gradient(135deg, #f59e0b, #ec4899);
+    .btn-burst {
+      background: linear-gradient(135deg, #ec4899, #8b5cf6);
       color: #fff;
-      box-shadow: 0 4px 15px rgba(236, 72, 153, 0.35);
+      box-shadow: 0 4px 18px rgba(236, 72, 153, 0.4);
     }
 
     .logout-btn {
-      background: rgba(239, 68, 68, 0.16);
-      border: 1px solid rgba(239, 68, 68, 0.45);
-      color: #fca5a5;
+      background: rgba(244, 63, 94, 0.16);
+      border: 1px solid rgba(244, 63, 94, 0.45);
+      color: #fda4af;
     }
-
-    .logout-btn:hover {
-      background: #ef4444;
-      color: #fff;
-    }
+    .logout-btn:hover { background: #f43f5e; color: #fff; }
 
     .menu-toggle-btn {
       display: none;
       background: rgba(30, 41, 59, 0.9);
       border: 1px solid rgba(148, 163, 184, 0.3);
-      color: #f8fafc;
+      color: #fff;
       padding: 8px 12px;
       border-radius: 9px;
       font-size: 13px;
@@ -238,77 +223,81 @@
 
     @media (max-width: 1080px) {
       header { flex-wrap: wrap; padding: 12px 18px; }
-      .menu-toggle-btn { display: inline-flex; align-items: center; gap: 6px; }
-      .top-nav {
-        display: none;
-        width: 100%;
-        order: 4;
-        flex-wrap: wrap;
-        margin-top: 8px;
-      }
+      .menu-toggle-btn { display: inline-flex; }
+      .top-nav { display: none; width: 100%; order: 4; flex-wrap: wrap; margin-top: 8px; }
       .top-nav.open { display: flex; }
     }
 
-    /* Main Container */
-    main {
+    /* Full-Page Container for Seismic Shake & Zero-G Float */
+    #pageShakeWrapper {
       position: relative;
       z-index: 10;
-      max-width: 1120px;
-      margin: 28px auto 60px;
+      max-width: 1140px;
+      margin: 26px auto 64px;
       padding: 0 22px;
     }
 
-    /* Pro Hero Banner with SVG Reactor Graphic */
-    .hero-card {
+    /* Hero Deck with Live Radar Graphic */
+    .hero-deck {
       position: relative;
       overflow: hidden;
-      background: linear-gradient(135deg, rgba(15, 23, 42, 0.85), rgba(30, 41, 59, 0.65));
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(56, 189, 248, 0.25);
-      border-radius: 24px;
+      background: linear-gradient(130deg, rgba(16, 24, 46, 0.9), rgba(28, 19, 51, 0.8));
+      backdrop-filter: blur(22px);
+      border: 1px solid rgba(163, 230, 53, 0.28);
+      border-radius: 26px;
       padding: 30px 34px;
-      margin-bottom: 24px;
-      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      margin-bottom: 22px;
+      box-shadow: 0 24px 55px rgba(0, 0, 0, 0.55);
       display: grid;
       grid-template-columns: 1fr auto;
       gap: 24px;
       align-items: center;
     }
 
-    @media (max-width: 780px) {
-      .hero-card { grid-template-columns: 1fr; }
-      .hero-graphic { display: none; }
+    /* Corner HUD Brackets */
+    .hero-deck::before, .hero-deck::after {
+      content: "";
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      border-color: var(--lime);
+      pointer-events: none;
+    }
+    .hero-deck::before { top: 12px; left: 12px; border-top: 2.5px solid; border-left: 2.5px solid; }
+    .hero-deck::after { bottom: 12px; right: 12px; border-bottom: 2.5px solid; border-right: 2.5px solid; }
+
+    @media (max-width: 800px) {
+      .hero-deck { grid-template-columns: 1fr; }
+      .radar-panel { display: none; }
     }
 
-    .hero-top-bar {
+    .status-pills {
       display: flex;
       flex-wrap: wrap;
-      align-items: center;
       gap: 10px;
       margin-bottom: 14px;
     }
 
-    .badge-live {
+    .pill-live {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      background: rgba(16, 185, 129, 0.14);
-      border: 1px solid rgba(16, 185, 129, 0.4);
-      color: #6ee7b7;
+      background: rgba(163, 230, 53, 0.14);
+      border: 1px solid rgba(163, 230, 53, 0.45);
+      color: #bef264;
       font-size: 11.5px;
       font-weight: 700;
       padding: 5px 12px;
       border-radius: 999px;
-      letter-spacing: 0.4px;
     }
 
-    .badge-clock {
+    .pill-clock {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: rgba(56, 189, 248, 0.12);
-      border: 1px solid rgba(56, 189, 248, 0.3);
-      color: #7dd3fc;
+      background: rgba(34, 211, 238, 0.12);
+      border: 1px solid rgba(34, 211, 238, 0.35);
+      color: #67e8f9;
       font-size: 11.5px;
       font-weight: 600;
       padding: 5px 12px;
@@ -316,118 +305,102 @@
       font-variant-numeric: tabular-nums;
     }
 
-    .pulse-dot {
+    .live-dot {
       width: 8px;
       height: 8px;
-      background: #10b981;
+      background: #a3e635;
       border-radius: 50%;
-      animation: pulse 1.5s infinite;
+      box-shadow: 0 0 10px #a3e635;
+      animation: blinkDot 1.4s infinite;
     }
-
-    @keyframes pulse {
-      0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-      70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    @keyframes blinkDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.45; transform: scale(1.25); }
     }
 
     h1 {
-      font-size: 31px;
+      font-size: 32px;
       font-weight: 800;
-      margin-bottom: 10px;
       letter-spacing: -0.6px;
+      margin-bottom: 10px;
     }
 
     .subtitle {
       color: #cbd5e1;
       font-size: 15px;
-      line-height: 1.6;
-      max-width: 650px;
+      line-height: 1.62;
+      max-width: 640px;
     }
 
-    /* Animated SVG Orbital Graphic */
-    .hero-graphic {
-      width: 165px;
-      height: 165px;
+    /* Animated SVG Radar Graphic */
+    .radar-panel {
+      width: 172px;
+      height: 172px;
       position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
-
-    .orbit-spin-slow {
+    .radar-sweep {
       transform-origin: 100px 100px;
-      animation: spinOrbit 18s linear infinite;
+      animation: radarSpin 4.5s linear infinite;
     }
-    .orbit-spin-rev {
-      transform-origin: 100px 100px;
-      animation: spinOrbit 12s linear infinite reverse;
-    }
-
-    @keyframes spinOrbit {
+    @keyframes radarSpin {
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
     }
 
-    /* Live Telemetry Strip */
-    .telemetry-grid {
+    /* Equalizer / Signal Bars Strip */
+    .signal-strip {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 14px;
-      margin-bottom: 28px;
+      margin-bottom: 26px;
     }
-
     @media (max-width: 820px) {
-      .telemetry-grid { grid-template-columns: repeat(2, 1fr); }
+      .signal-strip { grid-template-columns: repeat(2, 1fr); }
     }
 
-    .stat-tile {
-      background: var(--surface);
-      backdrop-filter: blur(14px);
-      border: 1px solid var(--border);
+    .metric-box {
+      background: var(--panel-bg);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(148, 163, 184, 0.16);
       border-radius: 16px;
-      padding: 16px 18px;
+      padding: 15px 18px;
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
       transition: transform 0.25s, border-color 0.25s;
     }
-
-    .stat-tile:hover {
+    .metric-box:hover {
       transform: translateY(-3px);
-      border-color: rgba(56, 189, 248, 0.4);
+      border-color: rgba(163, 230, 53, 0.45);
     }
+    .metric-label { font-size: 11.5px; color: var(--text-secondary); font-weight: 700; margin-bottom: 4px; }
+    .metric-num { font-size: 22px; font-weight: 800; font-variant-numeric: tabular-nums; }
 
-    .stat-label {
-      font-size: 12px;
-      color: var(--text-muted);
-      font-weight: 600;
-      margin-bottom: 4px;
+    .eq-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      height: 26px;
     }
-
-    .stat-val {
-      font-size: 22px;
-      font-weight: 800;
-      color: #fff;
-      font-variant-numeric: tabular-nums;
+    .eq-bar {
+      width: 4px;
+      border-radius: 2px;
+      background: linear-gradient(to top, #22d3ee, #a3e635);
+      animation: eqBounce 1.1s infinite ease-in-out alternate;
     }
-
-    .stat-spark {
-      width: 58px;
-      height: 28px;
+    .eq-bar:nth-child(2) { animation-delay: -0.25s; height: 22px; }
+    .eq-bar:nth-child(3) { animation-delay: -0.5s; height: 14px; }
+    .eq-bar:nth-child(4) { animation-delay: -0.75s; height: 26px; }
+    @keyframes eqBounce {
+      0% { height: 6px; }
+      100% { height: 26px; }
     }
 
     /* Section Panes */
-    .section-pane {
-      display: none;
-      animation: fadeSlideIn 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-
-    .section-pane.active {
-      display: block;
-    }
-
-    @keyframes fadeSlideIn {
-      from { opacity: 0; transform: translateY(10px); }
+    .section-pane { display: none; animation: paneReveal 0.32s ease; }
+    .section-pane.active { display: block; }
+    @keyframes paneReveal {
+      from { opacity: 0; transform: translateY(12px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
@@ -439,14 +412,7 @@
       gap: 12px;
       margin-bottom: 18px;
     }
-
-    .section-title {
-      font-size: 21px;
-      font-weight: 800;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    .section-title { font-size: 21px; font-weight: 800; }
 
     .back-hq-btn {
       background: rgba(15, 23, 42, 0.85);
@@ -457,107 +423,85 @@
       font-size: 12.5px;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s;
     }
+    .back-hq-btn:hover { border-color: var(--lime); color: #fff; }
 
-    .back-hq-btn:hover {
-      border-color: var(--cyan);
-      color: #fff;
-    }
-
-    /* Interactive 3D Tilt & Spotlight Cards */
+    /* Interactive Cards with Holographic Scanline & 3D Tilt */
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(305px, 1fr));
       gap: 22px;
-      perspective: 1000px;
     }
 
     .card {
       position: relative;
-      background: var(--surface);
-      backdrop-filter: blur(16px);
-      border: 1px solid var(--border);
-      border-radius: 20px;
+      background: var(--panel-bg);
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      border-radius: 22px;
       padding: 24px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      transform-style: preserve-3d;
-      transition: transform 0.18s ease-out, border-color 0.3s ease, box-shadow 0.3s ease;
       overflow: hidden;
+      transition: transform 0.18s ease-out, border-color 0.3s ease, box-shadow 0.3s ease;
     }
 
-    .card::before {
+    .card::after {
       content: "";
       position: absolute;
-      inset: 0;
-      background: radial-gradient(
-        420px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-        rgba(56, 189, 248, 0.14),
-        transparent 65%
-      );
-      opacity: 0;
-      transition: opacity 0.3s;
+      top: -120%;
+      left: -60%;
+      width: 55%;
+      height: 300%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.06), transparent);
+      transform: rotate(24deg);
+      transition: left 0.65s ease;
       pointer-events: none;
     }
-
-    .card:hover::before {
-      opacity: 1;
+    .card:hover::after {
+      left: 130%;
     }
 
     .card:hover {
-      border-color: rgba(56, 189, 248, 0.5);
-      box-shadow: 0 20px 38px rgba(0, 0, 0, 0.45);
+      border-color: rgba(163, 230, 53, 0.5);
+      box-shadow: 0 22px 45px rgba(0, 0, 0, 0.55);
     }
 
-    .card-graphic-wrap {
-      width: 54px;
-      height: 54px;
-      border-radius: 14px;
-      background: rgba(15, 23, 42, 0.85);
-      border: 1px solid rgba(56, 189, 248, 0.25);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 14px;
-      font-size: 28px;
-      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    .card:hover .card-graphic-wrap {
-      transform: scale(1.1) rotate(-4deg);
-      border-color: var(--cyan);
-    }
-
-    .card h2 {
-      font-size: 18.5px;
-      margin-bottom: 8px;
-      color: #f1f5f9;
-    }
-
-    .card p {
-      font-size: 14px;
-      color: var(--text-muted);
-      line-height: 1.55;
-      margin-bottom: 18px;
-    }
-
-    .meta-tag {
+    .card-badge {
       display: inline-block;
-      font-size: 11px;
-      font-weight: 700;
-      color: #7dd3fc;
-      background: rgba(56, 189, 248, 0.12);
-      border: 1px solid rgba(56, 189, 248, 0.3);
+      font-size: 10.5px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      color: #bef264;
+      background: rgba(163, 230, 53, 0.12);
+      border: 1px solid rgba(163, 230, 53, 0.3);
       padding: 3px 9px;
       border-radius: 999px;
       margin-bottom: 12px;
       width: fit-content;
-      letter-spacing: 0.4px;
     }
 
-    /* Progress Bar inside Cards */
+    .card-icon-box {
+      width: 56px;
+      height: 56px;
+      border-radius: 15px;
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.18), rgba(34, 211, 238, 0.12));
+      border: 1px solid rgba(168, 85, 247, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      margin-bottom: 14px;
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .card:hover .card-icon-box {
+      transform: scale(1.12) rotate(5deg);
+    }
+
+    .card h2 { font-size: 18.5px; margin-bottom: 8px; color: #f8fafc; }
+    .card p { font-size: 14px; color: var(--text-secondary); line-height: 1.55; margin-bottom: 18px; }
+
     .mini-progress {
       margin-bottom: 16px;
     }
@@ -571,14 +515,15 @@
     }
     .mini-bar-track {
       height: 6px;
-      background: rgba(15, 23, 42, 0.9);
+      background: rgba(5, 7, 14, 0.9);
       border-radius: 999px;
       overflow: hidden;
     }
     .mini-bar-fill {
       height: 100%;
       border-radius: 999px;
-      background: linear-gradient(90deg, #38bdf8, #a855f7);
+      background: linear-gradient(90deg, #a3e635, #22d3ee);
+      transition: width 0.3s ease;
     }
 
     .action-btn {
@@ -586,114 +531,131 @@
       z-index: 2;
       width: 100%;
       padding: 11px 14px;
-      border-radius: 11px;
+      border-radius: 12px;
       border: none;
       font-weight: 700;
       font-size: 13.5px;
       cursor: pointer;
-      color: white;
-      background: linear-gradient(135deg, #3b82f6, #2563eb);
-      transition: transform 0.15s, filter 0.2s, box-shadow 0.2s;
-      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+      color: #fff;
+      background: linear-gradient(135deg, #06b6d4, #2563eb);
+      box-shadow: 0 4px 16px rgba(6, 182, 212, 0.3);
+      transition: transform 0.15s, filter 0.2s;
     }
-
     .action-btn:hover { filter: brightness(1.12); }
     .action-btn:active { transform: scale(0.97); }
 
-    .btn-purple { background: linear-gradient(135deg, #8b5cf6, #6d28d9); box-shadow: 0 4px 14px rgba(139, 92, 246, 0.3); }
-    .btn-danger { background: linear-gradient(135deg, #f43f5e, #e11d48); box-shadow: 0 4px 14px rgba(244, 63, 94, 0.35); }
-    .btn-emerald { background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3); }
-    .btn-amber { background: linear-gradient(135deg, #f59e0b, #d97706); box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3); }
+    .btn-violet { background: linear-gradient(135deg, #a855f7, #7e22ce); box-shadow: 0 4px 16px rgba(168, 85, 247, 0.35); }
+    .btn-red-hazard { background: linear-gradient(135deg, #f43f5e, #be123c); box-shadow: 0 4px 18px rgba(244, 63, 94, 0.45); }
+    .btn-lime { background: linear-gradient(135deg, #84cc16, #4d7c0f); color: #05070e; box-shadow: 0 4px 16px rgba(132, 204, 22, 0.35); }
+    .btn-amber { background: linear-gradient(135deg, #f59e0b, #ea580c); box-shadow: 0 4px 16px rgba(245, 158, 11, 0.35); }
 
-    /* Interactive Modal / Drawer */
+    /* Heavy Full-Page Shake & Zero-Gravity Effects */
+    .mega-shake {
+      animation: heavyPageShake 0.42s cubic-bezier(.36,.07,.19,.97) both infinite;
+    }
+
+    @keyframes heavyPageShake {
+      0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+      15% { transform: translate3d(-12px, -8px, 0) rotate(-1.6deg); }
+      30% { transform: translate3d(12px, 7px, 0) rotate(1.6deg); }
+      45% { transform: translate3d(-10px, 9px, 0) rotate(-1.2deg); }
+      60% { transform: translate3d(10px, -6px, 0) rotate(1.2deg); }
+      75% { transform: translate3d(-7px, 5px, 0) rotate(-0.8deg); }
+      90% { transform: translate3d(7px, -4px, 0) rotate(0.8deg); }
+    }
+
+    .zero-gravity-mode {
+      animation: zeroGravFloat 2.8s ease-in-out infinite;
+    }
+    @keyframes zeroGravFloat {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-10px) rotate(0.5deg); }
+    }
+
+    .strobe-fx {
+      animation: strobeHue 0.65s infinite linear !important;
+    }
+    @keyframes strobeHue {
+      0% { filter: hue-rotate(0deg) saturate(1.3); }
+      100% { filter: hue-rotate(360deg) saturate(1.3); }
+    }
+
+    /* Interactive Modal */
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(3, 7, 18, 0.78);
+      background: rgba(3, 6, 15, 0.8);
       backdrop-filter: blur(10px);
-      z-index: 200;
+      z-index: 300;
       display: none;
       align-items: center;
       justify-content: center;
       padding: 20px;
     }
+    .modal-backdrop.open { display: flex; animation: paneReveal 0.2s ease; }
 
-    .modal-backdrop.open {
-      display: flex;
-      animation: fadeSlideIn 0.22s ease;
-    }
-
-    .modal-box {
+    .modal-card {
       width: 100%;
       max-width: 540px;
-      background: #0f172a;
-      border: 1px solid rgba(56, 189, 248, 0.4);
+      background: #0c1222;
+      border: 1px solid rgba(163, 230, 53, 0.35);
       border-radius: 22px;
-      padding: 26px;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.75);
-      position: relative;
+      padding: 24px;
+      box-shadow: 0 28px 65px rgba(0, 0, 0, 0.8);
     }
-
-    .modal-header {
+    .modal-head {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px;
       padding-bottom: 12px;
-      border-bottom: 1px solid var(--border);
+      margin-bottom: 16px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.16);
     }
-
-    .modal-close {
+    .modal-x {
       background: rgba(30, 41, 59, 0.9);
-      border: 1px solid var(--border);
-      color: #cbd5e1;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      color: #e2e8f0;
       width: 32px;
       height: 32px;
       border-radius: 8px;
       cursor: pointer;
       font-weight: 700;
     }
-    .modal-close:hover { color: #fff; border-color: var(--rose); }
+    .modal-x:hover { border-color: var(--crimson); color: #fff; }
 
-    /* Interactive Modal Controls */
-    .chat-feed {
-      max-height: 220px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-bottom: 14px;
-      padding-right: 4px;
-    }
-    .chat-msg {
-      background: rgba(30, 41, 59, 0.75);
-      border: 1px solid var(--border);
-      padding: 10px 13px;
-      border-radius: 12px;
-      font-size: 13.5px;
-    }
-    .chat-msg strong { color: var(--cyan); }
-    .modal-input-row {
-      display: flex;
-      gap: 8px;
-    }
-    .modal-input {
-      flex: 1;
-      background: #060913;
-      border: 1px solid rgba(148, 163, 184, 0.3);
+    .input-dark {
+      width: 100%;
+      background: #05070e;
+      border: 1px solid rgba(148, 163, 184, 0.28);
       color: #fff;
       padding: 10px 13px;
       border-radius: 10px;
       font-size: 13.5px;
       outline: none;
     }
-    .modal-input:focus { border-color: var(--cyan); }
+    .input-dark:focus { border-color: var(--lime); }
 
-    /* Command Palette List */
-    .cmd-item {
-      padding: 11px 14px;
+    .feed-box {
+      max-height: 210px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      margin-bottom: 12px;
+    }
+    .feed-item {
+      background: rgba(30, 41, 59, 0.65);
+      border: 1px solid rgba(148, 163, 184, 0.15);
+      padding: 10px 12px;
       border-radius: 11px;
-      background: rgba(30, 41, 59, 0.55);
+      font-size: 13px;
+    }
+    .feed-item strong { color: var(--lime); }
+
+    .cmd-row {
+      padding: 10px 13px;
+      border-radius: 10px;
+      background: rgba(30, 41, 59, 0.5);
       border: 1px solid transparent;
       display: flex;
       justify-content: space-between;
@@ -703,74 +665,45 @@
       font-size: 13.5px;
       font-weight: 600;
     }
-    .cmd-item:hover {
-      border-color: var(--cyan);
-      background: rgba(56, 189, 248, 0.14);
-    }
+    .cmd-row:hover { border-color: var(--lime); background: rgba(163, 230, 53, 0.1); }
 
-    /* Mini-Game Target Arena */
-    .game-arena {
+    /* Arcade Arena */
+    .arena-box {
       position: relative;
-      height: 210px;
-      background: #060913;
-      border: 1px solid rgba(56, 189, 248, 0.3);
+      height: 205px;
+      background: #05070e;
+      border: 1px solid rgba(34, 211, 238, 0.35);
       border-radius: 14px;
       overflow: hidden;
       margin: 12px 0;
-      cursor: crosshair;
     }
-    .game-orb {
+    .target-core {
       position: absolute;
-      width: 42px;
-      height: 42px;
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
-      background: radial-gradient(circle at 30% 30%, #38bdf8, #8b5cf6);
-      box-shadow: 0 0 18px #38bdf8;
+      background: radial-gradient(circle at 30% 30%, #a3e635, #06b6d4);
+      box-shadow: 0 0 20px #a3e635;
       cursor: pointer;
-      transition: transform 0.1s;
-    }
-    .game-orb:active { transform: scale(0.8); }
-
-    /* Hilarious Animations Classes */
-    .disco-mode { animation: discoBg 0.5s infinite linear !important; }
-    @keyframes discoBg {
-      0% { filter: hue-rotate(0deg); }
-      100% { filter: hue-rotate(360deg); }
     }
 
-    .barrel-roll { animation: spinPage 1.1s ease-in-out; }
-    @keyframes spinPage {
-      0% { transform: rotate(0deg) scale(1); }
-      50% { transform: rotate(180deg) scale(0.84); }
-      100% { transform: rotate(360deg) scale(1); }
-    }
-
-    .earthquake { animation: shakeScreen 0.4s infinite; }
-    @keyframes shakeScreen {
-      0%, 100% { transform: translate(0, 0) rotate(0deg); }
-      25% { transform: translate(-6px, 4px) rotate(-1deg); }
-      50% { transform: translate(6px, -4px) rotate(1deg); }
-      75% { transform: translate(-4px, -3px) rotate(-0.5deg); }
-    }
-
-    /* Toast Notification */
+    /* Toast */
     #toast {
       position: fixed;
       bottom: 26px;
       right: 26px;
-      background: rgba(15, 23, 42, 0.95);
-      backdrop-filter: blur(12px);
-      border: 1px solid var(--cyan);
+      background: rgba(12, 18, 34, 0.96);
+      border: 1px solid var(--lime);
       color: #f8fafc;
       padding: 13px 18px;
       border-radius: 13px;
       font-size: 13.5px;
       font-weight: 600;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 16px 38px rgba(0, 0, 0, 0.65);
       transform: translateY(120px);
       opacity: 0;
       transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-      z-index: 1000;
+      z-index: 1005;
     }
     #toast.show { transform: translateY(0); opacity: 1; }
   </style>
@@ -791,35 +724,28 @@
     }
   </script>
 
-  <!-- Visual Graphics Layers -->
-  <div class="cyber-grid"></div>
-  <div class="bg-orb orb-1"></div>
-  <div class="bg-orb orb-2"></div>
-  <div class="bg-orb orb-3"></div>
-  <canvas id="networkCanvas"></canvas>
-  <canvas id="confettiCanvas"></canvas>
+  <div class="aurora-backdrop"></div>
+  <div class="dot-matrix"></div>
+  <div class="glitch-flash"></div>
+  <canvas id="fxCanvas"></canvas>
 
   <header>
-    <div class="logo" id="brandHome" title="Return to HQ Overview">
-      <!-- Custom Vector Logo Emblem -->
-      <svg class="logo-svg" viewBox="0 0 40 40" fill="none">
+    <div class="brand-mark" id="brandHome" title="Return to HQ Overview">
+      <svg class="brand-badge-svg" viewBox="0 0 40 40" fill="none">
         <defs>
-          <linearGradient id="logoGrad" x1="0" y1="0" x2="40" y2="40">
-            <stop offset="0%" stop-color="#38bdf8" />
-            <stop offset="50%" stop-color="#a855f7" />
-            <stop offset="100%" stop-color="#f472b6" />
+          <linearGradient id="hexGrad" x1="0" y1="0" x2="40" y2="40">
+            <stop offset="0%" stop-color="#a3e635" />
+            <stop offset="50%" stop-color="#22d3ee" />
+            <stop offset="100%" stop-color="#ec4899" />
           </linearGradient>
         </defs>
-        <polygon points="20,3 36,12 36,28 20,37 4,28 4,12" stroke="url(#logoGrad)" stroke-width="2.5" fill="rgba(56,189,248,0.12)" />
-        <circle cx="20" cy="20" r="6" fill="url(#logoGrad)" />
-        <path d="M20 7V11M20 29V33M9 20H13M27 20H31" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/>
+        <path d="M20 3L35 11.5V28.5L20 37L5 28.5V11.5L20 3Z" stroke="url(#hexGrad)" stroke-width="2.5" fill="rgba(163,230,53,0.1)" />
+        <path d="M13 20H27M20 13V27" stroke="#a3e635" stroke-width="2.2" stroke-linecap="round" />
       </svg>
       JunctionTeam HQ
     </div>
 
-    <button type="button" class="menu-toggle-btn" id="mobileMenuBtn" aria-expanded="false">
-      ☰ Menu
-    </button>
+    <button type="button" class="menu-toggle-btn" id="mobileMenuBtn" aria-expanded="false">☰ Menu</button>
 
     <nav class="top-nav" id="topNav" aria-label="Workspace Sections">
       <button type="button" class="nav-btn" data-section="contact">💬 Contact &amp; Social Group</button>
@@ -830,333 +756,331 @@
     </nav>
 
     <div class="header-actions">
-      <button type="button" class="btn-icon" id="cmdTriggerBtn" title="Quick Command Palette">
-        ⌘ Quick <span class="kbd-hint">Ctrl+K</span>
-      </button>
-      <button type="button" class="btn-icon" id="soundToggleBtn" title="Toggle UI Sound FX">
-        🔊
-      </button>
-      <button type="button" class="btn-pill btn-party" id="confettiBtn">🎉 Celebrate</button>
+      <button type="button" class="btn-tool" id="cmdBtn">⌘ Launch <span class="kbd-tag">Ctrl+K</span></button>
+      <button type="button" class="btn-tool" id="audioBtn" title="Toggle Sound FX">🔊</button>
+      <button type="button" class="btn-pill btn-burst" id="celebrateBtn">⚡ Shockwave &amp; Confetti</button>
       <button type="button" class="btn-pill logout-btn" id="logoutBtn">Logout</button>
     </div>
   </header>
 
-  <main id="mainContainer">
-    <!-- Hero Command Card -->
-    <div class="hero-card">
-      <div>
-        <div class="hero-top-bar">
-          <div class="badge-live">
-            <span class="pulse-dot"></span> CLEARANCE: SUPREME BOSS
-          </div>
-          <div class="badge-clock" id="liveClock">🕒 Syncing Clock...</div>
-        </div>
-        <h1>Welcome inside, <span id="userDisplay" style="color:#38bdf8;">Admin</span>! 😎</h1>
-        <p class="subtitle" id="funnyStatus">
-          Command center online. Navigate sections above, press <strong>Ctrl + K</strong> for quick launch, or test your reflexes in the Entertainment Zone.
-        </p>
-      </div>
-
-      <!-- Pro Vector Orbital Core Graphic -->
-      <div class="hero-graphic" aria-hidden="true">
-        <svg viewBox="0 0 200 200" width="165" height="165">
-          <defs>
-            <radialGradient id="coreGlow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.9" />
-              <stop offset="60%" stop-color="#a855f7" stop-opacity="0.35" />
-              <stop offset="100%" stop-color="#060913" stop-opacity="0" />
-            </radialGradient>
-          </defs>
-          <circle cx="100" cy="100" r="85" fill="url(#coreGlow)" />
-          <g class="orbit-spin-slow">
-            <circle cx="100" cy="100" r="76" fill="none" stroke="rgba(56,189,248,0.35)" stroke-width="1.5" stroke-dasharray="10 8" />
-            <circle cx="100" cy="24" r="5" fill="#38bdf8" />
-            <circle cx="100" cy="176" r="4" fill="#f472b6" />
-          </g>
-          <g class="orbit-spin-rev">
-            <circle cx="100" cy="100" r="52" fill="none" stroke="rgba(168,85,247,0.45)" stroke-width="2" stroke-dasharray="24 12" />
-            <circle cx="152" cy="100" r="4.5" fill="#10b981" />
-          </g>
-          <polygon points="100,72 124,86 124,114 100,128 76,114 76,86" fill="rgba(15,23,42,0.9)" stroke="#38bdf8" stroke-width="2.5" />
-          <circle cx="100" cy="100" r="10" fill="#38bdf8" />
-        </svg>
-      </div>
-    </div>
-
-    <!-- Live Animated KPI Telemetry Bar -->
-    <div class="telemetry-grid">
-      <div class="stat-tile">
+  <div id="pageShakeWrapper">
+    <main id="mainContainer">
+      <div class="hero-deck">
         <div>
-          <div class="stat-label">PORTAL UPTIME</div>
-          <div class="stat-val" data-count="99.98" data-suffix="%">0%</div>
-        </div>
-        <svg class="stat-spark" viewBox="0 0 60 30">
-          <polyline fill="none" stroke="#10b981" stroke-width="2.5" points="2,24 14,20 26,22 38,10 50,12 58,4" />
-        </svg>
-      </div>
-
-      <div class="stat-tile">
-        <div>
-          <div class="stat-label">ACTIVE SQUAD</div>
-          <div class="stat-val" data-count="42" data-suffix=" Online">0</div>
-        </div>
-        <svg class="stat-spark" viewBox="0 0 60 30">
-          <polyline fill="none" stroke="#38bdf8" stroke-width="2.5" points="2,22 15,14 28,17 42,8 58,6" />
-        </svg>
-      </div>
-
-      <div class="stat-tile">
-        <div>
-          <div class="stat-label">UAT BUILDS PASSED</div>
-          <div class="stat-val" data-count="128" data-suffix="">0</div>
-        </div>
-        <svg class="stat-spark" viewBox="0 0 60 30">
-          <polyline fill="none" stroke="#a855f7" stroke-width="2.5" points="2,26 18,18 32,19 46,9 58,5" />
-        </svg>
-      </div>
-
-      <div class="stat-tile">
-        <div>
-          <div class="stat-label">CHAOS INDEX</div>
-          <div class="stat-val" id="chaosStat" style="color:#f472b6;">LOW</div>
-        </div>
-        <svg class="stat-spark" viewBox="0 0 60 30">
-          <polyline fill="none" stroke="#f472b6" stroke-width="2.5" points="2,15 16,15 28,12 40,18 58,14" />
-        </svg>
-      </div>
-    </div>
-
-    <!-- 1. CONTACT US & SOCIAL GROUP SECTION -->
-    <section class="section-pane" id="sec-contact">
-      <div class="section-header-row">
-        <h2 class="section-title">💬 Contact Us &amp; Social Group</h2>
-        <button type="button" class="back-hq-btn" data-go="entertainment">Go to Entertainment HQ</button>
-      </div>
-      <div class="grid">
-        <div class="card tilt-card">
-          <div>
-            <span class="meta-tag">LIVE COMMUNITY FEED</span>
-            <div class="card-graphic-wrap">🌐</div>
-            <h2>JunctionTeam Social Group</h2>
-            <p>Post live team shoutouts, UAT release updates, and cross-team announcements in the interactive squad wall.</p>
+          <div class="status-pills">
+            <div class="pill-live"><span class="live-dot"></span> CLEARANCE: SUPREME BOSS</div>
+            <div class="pill-clock" id="clockDisplay">🕒 --:--:--</div>
           </div>
-          <button type="button" class="action-btn btn-purple" data-modal="socialChat">Open Live Group Wall</button>
+          <h1>Welcome inside, <span id="userDisplay" style="color:#a3e635;">Admin</span>! 😎</h1>
+          <p class="subtitle" id="funnyStatus">
+            Heavy FX Command Deck online. Switch sections above, open <strong>Ctrl+K</strong>, or trigger full-page seismic tremors from the Entertainment lab.
+          </p>
         </div>
 
-        <div class="card tilt-card">
-          <div>
-            <span class="meta-tag">INSTANT OPS DESK</span>
-            <div class="card-graphic-wrap">📩</div>
-            <h2>Contact Support &amp; Ops</h2>
-            <p>Submit a quick access request, UAT credential ping, or infrastructure inquiry straight to the ops queue.</p>
-          </div>
-          <button type="button" class="action-btn" data-modal="opsTicket">Raise Quick Ping</button>
-        </div>
-
-        <div class="card tilt-card">
-          <div>
-            <span class="meta-tag">SQUAD PULSE</span>
-            <div class="card-graphic-wrap">📣</div>
-            <h2>Team Poll &amp; Broadcast</h2>
-            <p>Vote on Friday team activities or broadcast a celebratory announcement across the portal.</p>
-          </div>
-          <button type="button" class="action-btn btn-emerald" data-modal="teamPoll">Launch Quick Poll</button>
+        <!-- Pro Vector Radar Scope -->
+        <div class="radar-panel" aria-hidden="true">
+          <svg viewBox="0 0 200 200" width="172" height="172">
+            <defs>
+              <radialGradient id="radarGrad" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#a3e635" stop-opacity="0.45" />
+                <stop offset="100%" stop-color="#05070e" stop-opacity="0" />
+              </radialGradient>
+              <linearGradient id="sweepGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#a3e635" stop-opacity="0" />
+                <stop offset="100%" stop-color="#a3e635" stop-opacity="0.48" />
+              </linearGradient>
+            </defs>
+            <circle cx="100" cy="100" r="90" fill="url(#radarGrad)" stroke="rgba(163,230,53,0.35)" stroke-width="1.5" />
+            <circle cx="100" cy="100" r="62" fill="none" stroke="rgba(34,211,238,0.25)" stroke-width="1.2" stroke-dasharray="6 5" />
+            <circle cx="100" cy="100" r="32" fill="none" stroke="rgba(168,85,247,0.3)" stroke-width="1.2" />
+            <line x1="10" y1="100" x2="190" y2="100" stroke="rgba(148,163,184,0.15)" stroke-width="1" />
+            <line x1="100" y1="10" x2="100" y2="190" stroke="rgba(148,163,184,0.15)" stroke-width="1" />
+            <g class="radar-sweep">
+              <path d="M100 100 L100 10 A90 90 0 0 1 178 55 Z" fill="url(#sweepGrad)" />
+              <line x1="100" y1="100" x2="178" y2="55" stroke="#a3e635" stroke-width="2" />
+            </g>
+            <circle cx="136" cy="68" r="4" fill="#22d3ee" />
+            <circle cx="72" cy="128" r="3.5" fill="#ec4899" />
+            <circle cx="100" cy="100" r="5" fill="#a3e635" />
+          </svg>
         </div>
       </div>
-    </section>
 
-    <!-- 2. CAREER SECTION -->
-    <section class="section-pane" id="sec-career">
-      <div class="section-header-row">
-        <h2 class="section-title">💼 Career &amp; Growth Hub</h2>
-        <button type="button" class="back-hq-btn" data-go="entertainment">Go to Entertainment HQ</button>
-      </div>
-      <div class="grid">
-        <div class="card tilt-card">
+      <!-- Equalizer Telemetry Strip -->
+      <div class="signal-strip">
+        <div class="metric-box">
           <div>
-            <span class="meta-tag">GROWTH TRACKS</span>
-            <div class="card-graphic-wrap">🧭</div>
-            <h2>Role Progression Matrix</h2>
-            <p>Explore Principal Systems Architect, Cloud Security Lead, and Product Engineering tracks.</p>
-            <div class="mini-progress">
-              <div class="mini-progress-header"><span>Leadership Readiness</span><span>84%</span></div>
-              <div class="mini-bar-track"><div class="mini-bar-fill" style="width:84%"></div></div>
+            <div class="metric-label">NODE UPTIME</div>
+            <div class="metric-num" style="color:#a3e635;">99.99%</div>
+          </div>
+          <div class="eq-bars" aria-hidden="true">
+            <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
+          </div>
+        </div>
+
+        <div class="metric-box">
+          <div>
+            <div class="metric-label">ACTIVE SQUAD</div>
+            <div class="metric-num" style="color:#22d3ee;">42 Online</div>
+          </div>
+          <div class="eq-bars" aria-hidden="true">
+            <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
+          </div>
+        </div>
+
+        <div class="metric-box">
+          <div>
+            <div class="metric-label">UAT BUILDS</div>
+            <div class="metric-num" style="color:#c084fc;">128 OK</div>
+          </div>
+          <div class="eq-bars" aria-hidden="true">
+            <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
+          </div>
+        </div>
+
+        <div class="metric-box">
+          <div>
+            <div class="metric-label">SEISMIC / CHAOS</div>
+            <div class="metric-num" id="chaosStat" style="color:#f472b6;">NOMINAL</div>
+          </div>
+          <div class="eq-bars" aria-hidden="true">
+            <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1. CONTACT US & SOCIAL GROUP SECTION -->
+      <section class="section-pane" id="sec-contact">
+        <div class="section-header-row">
+          <h2 class="section-title">💬 Contact Us &amp; Social Group</h2>
+          <button type="button" class="back-hq-btn" data-go="entertainment">Go to Entertainment HQ</button>
+        </div>
+        <div class="grid">
+          <div class="card tilt-card">
+            <div>
+              <span class="card-badge">LIVE COMMUNITY FEED</span>
+              <div class="card-icon-box">🌐</div>
+              <h2>JunctionTeam Social Group</h2>
+              <p>Post live team shoutouts, UAT release updates, and cross-team announcements in the interactive squad wall.</p>
             </div>
+            <button type="button" class="action-btn btn-violet" data-modal="socialChat">Open Live Group Wall</button>
           </div>
-          <button type="button" class="action-btn" data-modal="careerTracks">Explore Role Matrix</button>
-        </div>
 
-        <div class="card tilt-card">
-          <div>
-            <span class="meta-tag">SKILL LABS</span>
-            <div class="card-graphic-wrap">📚</div>
-            <h2>Interactive Skill Tracker</h2>
-            <p>Toggle completed architecture labs, automation milestones, and certification prep modules.</p>
-            <div class="mini-progress">
-              <div class="mini-progress-header"><span>Quarter Milestones</span><span id="skillPctLabel">75%</span></div>
-              <div class="mini-bar-track"><div class="mini-bar-fill" id="skillPctBar" style="width:75%"></div></div>
+          <div class="card tilt-card">
+            <div>
+              <span class="card-badge">INSTANT OPS DESK</span>
+              <div class="card-icon-box">📩</div>
+              <h2>Contact Support &amp; Ops</h2>
+              <p>Submit a quick access request, UAT credential ping, or infrastructure inquiry straight to the ops queue.</p>
             </div>
+            <button type="button" class="action-btn" data-modal="opsTicket">Raise Quick Ping</button>
           </div>
-          <button type="button" class="action-btn btn-purple" data-modal="skillChecklist">Update Skill Checklist</button>
-        </div>
 
-        <div class="card tilt-card">
-          <div>
-            <span class="meta-tag">MENTORSHIP</span>
-            <div class="card-graphic-wrap">🎯</div>
-            <h2>1-on-1 Review Builder</h2>
-            <p>Log your weekly wins and generate structured talking points for your next career check-in.</p>
-          </div>
-          <button type="button" class="action-btn btn-emerald" data-modal="goalBuilder">Draft Review Note</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- 3. HR SECTION -->
-    <section class="section-pane" id="sec-hr">
-      <div class="section-header-row">
-        <h2 class="section-title">👥 People &amp; HR Desk</h2>
-        <button type="button" class="back-hq-btn" data-go="entertainment">Go to Entertainment HQ</button>
-      </div>
-      <div class="grid">
-        <div class="card tilt-card">
-          <div>
-            <span class="meta-tag">POLICY VAULT</span>
-            <div class="card-graphic-wrap">📋</div>
-            <h2>Handbook &amp; Shift Guidelines</h2>
-            <p>Instant reference for hybrid work policies, night-shift allowances, and security compliance rules.</p>
-          </div>
-          <button type="button" class="action-btn" data-modal="hrPolicies">Browse Policies</button>
-        </div>
-
-        <div class="card tilt-card">
-          <div>
-            <span class="meta-tag">TIME OFF SIMULATOR</span>
-            <div class="card-graphic-wrap">🗓️</div>
-            <h2>Interactive Leave Planner</h2>
-            <p>Calculate remaining leave balance and preview shift handover coverage before applying.</p>
-            <div class="mini-progress">
-              <div class="mini-progress-header"><span>Available Leave Balance</span><span>18 Days</span></div>
-              <div class="mini-bar-track"><div class="mini-bar-fill" style="width:72%"></div></div>
+          <div class="card tilt-card">
+            <div>
+              <span class="card-badge">SQUAD PULSE</span>
+              <div class="card-icon-box">📣</div>
+              <h2>Team Poll &amp; Broadcast</h2>
+              <p>Vote on Friday team activities or broadcast a celebratory announcement across the portal.</p>
             </div>
+            <button type="button" class="action-btn btn-lime" data-modal="teamPoll">Launch Quick Poll</button>
           </div>
-          <button type="button" class="action-btn btn-emerald" data-modal="leavePlanner">Open Leave Planner</button>
         </div>
+      </section>
 
-        <div class="card tilt-card">
-          <div>
-            <span class="meta-tag">BENEFITS &amp; PERKS</span>
-            <div class="card-graphic-wrap">🤝</div>
-            <h2>HR Helpdesk &amp; Wellness</h2>
-            <p>Check medical coverage details, wellness stipends, or raise a confidential HR query.</p>
-          </div>
-          <button type="button" class="action-btn btn-purple" data-modal="hrQuery">Contact HR Desk</button>
+      <!-- 2. CAREER SECTION -->
+      <section class="section-pane" id="sec-career">
+        <div class="section-header-row">
+          <h2 class="section-title">💼 Career &amp; Growth Hub</h2>
+          <button type="button" class="back-hq-btn" data-go="entertainment">Go to Entertainment HQ</button>
         </div>
-      </div>
-    </section>
-
-    <!-- 4. PRODUCT SECTION -->
-    <section class="section-pane" id="sec-product">
-      <div class="section-header-row">
-        <h2 class="section-title">📦 Product &amp; UAT Command</h2>
-        <button type="button" class="back-hq-btn" data-go="entertainment">Go to Entertainment HQ</button>
-      </div>
-      <div class="grid">
-        <div class="card tilt-card">
-          <div>
-            <span class="meta-tag">LIVE ENVIRONMENT</span>
-            <div class="card-graphic-wrap">🛠️</div>
-            <h2>JunctionTeam Portal (UAT)</h2>
-            <p>Inspect authentication session state, custom domain health, and active UAT verification checks.</p>
-            <div class="mini-progress">
-              <div class="mini-progress-header"><span>UAT Verification Coverage</span><span>92%</span></div>
-              <div class="mini-bar-track"><div class="mini-bar-fill" style="width:92%"></div></div>
+        <div class="grid">
+          <div class="card tilt-card">
+            <div>
+              <span class="card-badge">GROWTH TRACKS</span>
+              <div class="card-icon-box">🧭</div>
+              <h2>Role Progression Matrix</h2>
+              <p>Explore Principal Systems Architect, Cloud Security Lead, and Product Engineering tracks.</p>
+              <div class="mini-progress">
+                <div class="mini-progress-header"><span>Leadership Readiness</span><span>84%</span></div>
+                <div class="mini-bar-track"><div class="mini-bar-fill" style="width:84%"></div></div>
+              </div>
             </div>
+            <button type="button" class="action-btn" data-modal="careerTracks">Explore Role Matrix</button>
           </div>
-          <button type="button" class="action-btn" data-modal="uatInspector">Run Live Diagnostics</button>
-        </div>
 
-        <div class="card tilt-card">
-          <div>
-            <span class="meta-tag">RELEASE PIPELINE</span>
-            <div class="card-graphic-wrap">🗺️</div>
-            <h2>Interactive Roadmap</h2>
-            <p>Track shipped v2.4 graphics upgrades, mobile OTP milestones, and upcoming v3.0 modules.</p>
+          <div class="card tilt-card">
+            <div>
+              <span class="card-badge">SKILL LABS</span>
+              <div class="card-icon-box">📚</div>
+              <h2>Interactive Skill Tracker</h2>
+              <p>Toggle completed architecture labs, automation milestones, and certification prep modules.</p>
+              <div class="mini-progress">
+                <div class="mini-progress-header"><span>Quarter Milestones</span><span id="skillPctLabel">75%</span></div>
+                <div class="mini-bar-track"><div class="mini-bar-fill" id="skillPctBar" style="width:75%"></div></div>
+              </div>
+            </div>
+            <button type="button" class="action-btn btn-violet" data-modal="skillChecklist">Update Skill Checklist</button>
           </div>
-          <button type="button" class="action-btn btn-purple" data-modal="roadmapView">View Release Timeline</button>
-        </div>
 
-        <div class="card tilt-card">
-          <div>
-            <span class="meta-tag">QA &amp; FEEDBACK</span>
-            <div class="card-graphic-wrap">🧪</div>
-            <h2>UAT Bug &amp; Idea Tracker</h2>
-            <p>Log live UI observations or feature ideas during testing and export them cleanly.</p>
+          <div class="card tilt-card">
+            <div>
+              <span class="card-badge">MENTORSHIP</span>
+              <div class="card-icon-box">🎯</div>
+              <h2>1-on-1 Review Builder</h2>
+              <p>Log your weekly wins and generate structured talking points for your next career check-in.</p>
+            </div>
+            <button type="button" class="action-btn btn-lime" data-modal="goalBuilder">Draft Review Note</button>
           </div>
-          <button type="button" class="action-btn btn-emerald" data-modal="bugLogger">Log UAT Observation</button>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- 5. ENTERTAINMENT SECTION -->
-    <section class="section-pane active" id="sec-entertainment">
-      <div class="section-header-row">
-        <h2 class="section-title">🎮 Entertainment &amp; Chaos Lab</h2>
-      </div>
-      <div class="grid">
-        <!-- Card 1: Runaway Salary Button -->
-        <div class="card tilt-card">
-          <div>
-            <span class="meta-tag">REFLEX CHALLENGE</span>
-            <div class="card-graphic-wrap">💸</div>
-            <h2>Instant 500% Salary Hike</h2>
-            <p>Click the button below to immediately approve an unlimited bonus and extra paid vacations.</p>
-          </div>
-          <button type="button" class="action-btn" id="runawayBtn">Claim Bonus Now</button>
+      <!-- 3. HR SECTION -->
+      <section class="section-pane" id="sec-hr">
+        <div class="section-header-row">
+          <h2 class="section-title">👥 People &amp; HR Desk</h2>
+          <button type="button" class="back-hq-btn" data-go="entertainment">Go to Entertainment HQ</button>
         </div>
+        <div class="grid">
+          <div class="card tilt-card">
+            <div>
+              <span class="card-badge">POLICY VAULT</span>
+              <div class="card-icon-box">📋</div>
+              <h2>Handbook &amp; Shift Guidelines</h2>
+              <p>Instant reference for hybrid work policies, night-shift allowances, and security compliance rules.</p>
+            </div>
+            <button type="button" class="action-btn" data-modal="hrPolicies">Browse Policies</button>
+          </div>
 
-        <!-- Card 2: Barrel Roll & Disco -->
-        <div class="card tilt-card">
-          <div>
-            <span class="meta-tag">PARTY PROTOCOL</span>
-            <div class="card-graphic-wrap">🕺</div>
-            <h2>Emergency Dance Break</h2>
-            <p>Feeling stressed? Activate full-screen RGB party mode and execute an aerodynamic 360° barrel roll.</p>
+          <div class="card tilt-card">
+            <div>
+              <span class="card-badge">TIME OFF SIMULATOR</span>
+              <div class="card-icon-box">🗓️</div>
+              <h2>Interactive Leave Planner</h2>
+              <p>Calculate remaining leave balance and preview shift handover coverage before applying.</p>
+              <div class="mini-progress">
+                <div class="mini-progress-header"><span>Available Leave Balance</span><span>18 Days</span></div>
+                <div class="mini-bar-track"><div class="mini-bar-fill" style="width:72%"></div></div>
+              </div>
+            </div>
+            <button type="button" class="action-btn btn-lime" data-modal="leavePlanner">Open Leave Planner</button>
           </div>
-          <button type="button" class="action-btn btn-purple" id="discoBtn">Activate Disco Mode</button>
-        </div>
 
-        <!-- Card 3: Forbidden Red Button -->
-        <div class="card tilt-card">
-          <div>
-            <span class="meta-tag">MAXIMUM HAZARD</span>
-            <div class="card-graphic-wrap">🚨</div>
-            <h2>The Forbidden Red Button</h2>
-            <p>Seriously, don't touch this. We don't even know what the previous developer wired it to.</p>
+          <div class="card tilt-card">
+            <div>
+              <span class="card-badge">BENEFITS &amp; PERKS</span>
+              <div class="card-icon-box">🤝</div>
+              <h2>HR Helpdesk &amp; Wellness</h2>
+              <p>Check medical coverage details, wellness stipends, or raise a confidential HR query.</p>
+            </div>
+            <button type="button" class="action-btn btn-violet" data-modal="hrQuery">Contact HR Desk</button>
           </div>
-          <button type="button" class="action-btn btn-danger" id="panicBtn">DO NOT PRESS</button>
         </div>
+      </section>
 
-        <!-- Card 4: Neon Cyber-Reflex Mini-Game -->
-        <div class="card tilt-card">
-          <div>
-            <span class="meta-tag">ARCADE MINI-GAME</span>
-            <div class="card-graphic-wrap">⚡</div>
-            <h2>Neon Core Hunter</h2>
-            <p>Test your admin reaction speed! Click as many teleporting quantum orbs as possible in 15 seconds.</p>
-          </div>
-          <button type="button" class="action-btn btn-amber" data-modal="miniGame">Play Arcade Game</button>
+      <!-- 4. PRODUCT SECTION -->
+      <section class="section-pane" id="sec-product">
+        <div class="section-header-row">
+          <h2 class="section-title">📦 Product &amp; UAT Command</h2>
+          <button type="button" class="back-hq-btn" data-go="entertainment">Go to Entertainment HQ</button>
         </div>
-      </div>
-    </section>
-  </main>
+        <div class="grid">
+          <div class="card tilt-card">
+            <div>
+              <span class="card-badge">LIVE ENVIRONMENT</span>
+              <div class="card-icon-box">🛠️</div>
+              <h2>JunctionTeam Portal (UAT)</h2>
+              <p>Inspect authentication session state, custom domain health, and active UAT verification checks.</p>
+              <div class="mini-progress">
+                <div class="mini-progress-header"><span>UAT Verification Coverage</span><span>92%</span></div>
+                <div class="mini-bar-track"><div class="mini-bar-fill" style="width:92%"></div></div>
+              </div>
+            </div>
+            <button type="button" class="action-btn" data-modal="uatInspector">Run Live Diagnostics</button>
+          </div>
+
+          <div class="card tilt-card">
+            <div>
+              <span class="card-badge">RELEASE PIPELINE</span>
+              <div class="card-icon-box">🗺️</div>
+              <h2>Interactive Roadmap</h2>
+              <p>Track shipped FX upgrades, mobile verification features, and upcoming v3.0 modules.</p>
+            </div>
+            <button type="button" class="action-btn btn-violet" data-modal="roadmapView">View Release Timeline</button>
+          </div>
+
+          <div class="card tilt-card">
+            <div>
+              <span class="card-badge">QA &amp; FEEDBACK</span>
+              <div class="card-icon-box">🧪</div>
+              <h2>UAT Bug &amp; Idea Tracker</h2>
+              <p>Log live UI observations or feature ideas during testing and keep track of edge cases.</p>
+            </div>
+            <button type="button" class="action-btn btn-lime" data-modal="bugLogger">Log UAT Observation</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. ENTERTAINMENT SECTION (DEFAULT ACTIVE HQ CARDS) -->
+      <section class="section-pane active" id="sec-entertainment">
+        <div class="section-header-row">
+          <h2 class="section-title">🎮 Entertainment &amp; Chaos Lab</h2>
+        </div>
+        <div class="grid">
+          <!-- Card 1: Runaway Salary Button -->
+          <div class="card tilt-card">
+            <div>
+              <span class="card-badge">REFLEX CHALLENGE</span>
+              <div class="card-icon-box">💸</div>
+              <h2>Instant 500% Salary Hike</h2>
+              <p>Click the button below to immediately approve an unlimited bonus and extra paid vacations.</p>
+            </div>
+            <button type="button" class="action-btn" id="runawayBtn">Claim Bonus Now</button>
+          </div>
+
+          <!-- Card 2: Zero-G Float & Strobe Dance Break -->
+          <div class="card tilt-card">
+            <div>
+              <span class="card-badge">ZERO-G &amp; STROBE</span>
+              <div class="card-icon-box">🕺</div>
+              <h2>Emergency Dance Break</h2>
+              <p>Feeling stressed? Activate full-screen neon strobe lighting and zero-gravity page float.</p>
+            </div>
+            <button type="button" class="action-btn btn-violet" id="discoBtn">Activate Zero-G Party</button>
+          </div>
+
+          <!-- Card 3: Forbidden Red Button (Full-Page Shake + Shockwave) -->
+          <div class="card tilt-card">
+            <div>
+              <span class="card-badge">MAXIMUM HAZARD</span>
+              <div class="card-icon-box">🚨</div>
+              <h2>The Forbidden Red Button</h2>
+              <p>Seriously, don't touch this. We don't even know what the previous developer wired it to.</p>
+            </div>
+            <button type="button" class="action-btn btn-red-hazard" id="panicBtn">DO NOT PRESS</button>
+          </div>
+
+          <!-- Card 4: Neon Core Hunter Mini-Game -->
+          <div class="card tilt-card">
+            <div>
+              <span class="card-badge">ARCADE MINI-GAME</span>
+              <div class="card-icon-box">⚡</div>
+              <h2>Neon Core Hunter</h2>
+              <p>Test your admin reaction speed! Click teleporting quantum cores before time runs out.</p>
+            </div>
+            <button type="button" class="action-btn btn-amber" data-modal="miniGame">Play Arcade Game</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
 
   <!-- Universal Interactive Modal -->
   <div class="modal-backdrop" id="universalModal" role="dialog" aria-modal="true">
-    <div class="modal-box">
-      <div class="modal-header">
+    <div class="modal-card">
+      <div class="modal-head">
         <h3 id="modalTitle" style="font-size:18px;font-weight:800;">Modal Title</h3>
-        <button type="button" class="modal-close" id="closeModalBtn">✕</button>
+        <button type="button" class="modal-x" id="closeModalBtn">✕</button>
       </div>
       <div id="modalBody"></div>
     </div>
@@ -1175,16 +1099,16 @@
       const userDisplay = document.getElementById("userDisplay");
       if (userDisplay) userDisplay.textContent = displayName;
 
-      const clockEl = document.getElementById("liveClock");
+      const clockDisplay = document.getElementById("clockDisplay");
       function updateClock() {
-        if (!clockEl) return;
+        if (!clockDisplay) return;
         const now = new Date();
-        clockEl.textContent = "🕒 " + now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+        clockDisplay.textContent = "🕒 " + now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
       }
       updateClock();
       setInterval(updateClock, 1000);
 
-      // 2. Procedural Web Audio Synthesizer (Zero External Files)
+      // 2. Web Audio Synthesizer
       let soundEnabled = true;
       let audioCtx = null;
       function playTone(freq = 520, type = "sine", duration = 0.09, gainVal = 0.06) {
@@ -1204,10 +1128,10 @@
         } catch (_) {}
       }
 
-      const soundToggleBtn = document.getElementById("soundToggleBtn");
-      soundToggleBtn?.addEventListener("click", () => {
+      const audioBtn = document.getElementById("audioBtn");
+      audioBtn?.addEventListener("click", () => {
         soundEnabled = !soundEnabled;
-        soundToggleBtn.textContent = soundEnabled ? "🔊" : "🔇";
+        audioBtn.textContent = soundEnabled ? "🔊" : "🔇";
         if (soundEnabled) playTone(660, "triangle", 0.12);
         showToast(soundEnabled ? "🔊 UI Sound Effects Enabled" : "🔇 UI Sound Effects Muted");
       });
@@ -1223,118 +1147,22 @@
         toastTimer = setTimeout(() => toast.classList.remove("show"), 3200);
       }
 
-      // 4. Animated Telemetry Counters
-      document.querySelectorAll(".stat-val[data-count]").forEach((el) => {
-        const target = parseFloat(el.dataset.count);
-        const suffix = el.dataset.suffix || "";
-        const isFloat = String(target).includes(".");
-        let current = 0;
-        const step = target / 35;
-        const timer = setInterval(() => {
-          current += step;
-          if (current >= target) {
-            current = target;
-            clearInterval(timer);
-          }
-          el.textContent = (isFloat ? current.toFixed(2) : Math.round(current)) + suffix;
-        }, 28);
-      });
-
-      // 5. 3D Perspective Tilt & Radial Spotlight on Cards
+      // 4. 3D Tilt on Cards
       document.querySelectorAll(".tilt-card").forEach((card) => {
         card.addEventListener("mousemove", (e) => {
           const rect = card.getBoundingClientRect();
           const x = e.clientX - rect.left;
           const y = e.clientY - rect.top;
-          card.style.setProperty("--mouse-x", `${x}px`);
-          card.style.setProperty("--mouse-y", `${y}px`);
-
-          const centerX = rect.width / 2;
-          const centerY = rect.height / 2;
-          const rotateX = ((y - centerY) / centerY) * -5;
-          const rotateY = ((x - centerX) / centerX) * 5;
-          card.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+          const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -4.5;
+          const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 4.5;
+          card.style.transform = `perspective(950px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
         });
-
         card.addEventListener("mouseleave", () => {
-          card.style.transform = "perspective(900px) rotateX(0deg) rotateY(0deg) translateY(0)";
+          card.style.transform = "perspective(950px) rotateX(0deg) rotateY(0deg) translateY(0)";
         });
       });
 
-      // 6. Interactive Neural Constellation Background
-      const netCanvas = document.getElementById("networkCanvas");
-      const netCtx = netCanvas?.getContext("2d");
-      let netNodes = [];
-      const mouse = { x: null, y: null };
-
-      window.addEventListener("mousemove", (e) => {
-        mouse.x = e.clientX;
-        mouse.y = e.clientY;
-      });
-
-      function initNetwork() {
-        if (!netCanvas) return;
-        netCanvas.width = window.innerWidth;
-        netCanvas.height = window.innerHeight;
-        const count = Math.min(55, Math.floor((window.innerWidth * window.innerHeight) / 24000));
-        netNodes = Array.from({ length: count }, () => ({
-          x: Math.random() * netCanvas.width,
-          y: Math.random() * netCanvas.height,
-          vx: (Math.random() - 0.5) * 0.55,
-          vy: (Math.random() - 0.5) * 0.55,
-          r: Math.random() * 2 + 1.2
-        }));
-      }
-
-      function animateNetwork() {
-        if (netCanvas && netCtx) {
-          netCtx.clearRect(0, 0, netCanvas.width, netCanvas.height);
-          for (let i = 0; i < netNodes.length; i++) {
-            const a = netNodes[i];
-            a.x += a.vx;
-            a.y += a.vy;
-            if (a.x < 0 || a.x > netCanvas.width) a.vx *= -1;
-            if (a.y < 0 || a.y > netCanvas.height) a.vy *= -1;
-
-            netCtx.beginPath();
-            netCtx.arc(a.x, a.y, a.r, 0, Math.PI * 2);
-            netCtx.fillStyle = "rgba(56, 189, 248, 0.55)";
-            netCtx.fill();
-
-            for (let j = i + 1; j < netNodes.length; j++) {
-              const b = netNodes[j];
-              const dist = Math.hypot(a.x - b.x, a.y - b.y);
-              if (dist < 130) {
-                netCtx.beginPath();
-                netCtx.moveTo(a.x, a.y);
-                netCtx.lineTo(b.x, b.y);
-                netCtx.strokeStyle = `rgba(56, 189, 248, ${(1 - dist / 130) * 0.18})`;
-                netCtx.stroke();
-              }
-            }
-
-            if (mouse.x !== null) {
-              const mDist = Math.hypot(a.x - mouse.x, a.y - mouse.y);
-              if (mDist < 160) {
-                netCtx.beginPath();
-                netCtx.moveTo(a.x, a.y);
-                netCtx.lineTo(mouse.x, mouse.y);
-                netCtx.strokeStyle = `rgba(168, 85, 247, ${(1 - mDist / 160) * 0.35})`;
-                netCtx.stroke();
-              }
-            }
-          }
-        }
-        requestAnimationFrame(animateNetwork);
-      }
-
-      if (netCanvas && netCtx) {
-        initNetwork();
-        animateNetwork();
-        window.addEventListener("resize", initNetwork);
-      }
-
-      // 7. Navigation & Top Menu
+      // 5. Navigation & Top Menu
       const navButtons = document.querySelectorAll(".nav-btn");
       const sectionPanes = document.querySelectorAll(".section-pane");
       const topNav = document.getElementById("topNav");
@@ -1361,7 +1189,129 @@
         mobileMenuBtn.setAttribute("aria-expanded", String(isOpen));
       });
 
-      // 8. Interactive Modal Content & Command Palette
+      // 6. Canvas FX: Confetti + Shockwave Rings + Spark Bursts
+      const fxCanvas = document.getElementById("fxCanvas");
+      const fxCtx = fxCanvas?.getContext("2d");
+      const confettiList = [];
+      const shockwaves = [];
+      const sparks = [];
+
+      function resizeFxCanvas() {
+        if (!fxCanvas) return;
+        fxCanvas.width = window.innerWidth;
+        fxCanvas.height = window.innerHeight;
+      }
+
+      function launchConfetti(originX = window.innerWidth / 2, originY = window.innerHeight / 2) {
+        if (!fxCanvas || !fxCtx) return;
+        playTone(780, "triangle", 0.14);
+        const palette = ["#a3e635", "#22d3ee", "#ec4899", "#facc15", "#a855f7", "#fb7185"];
+        for (let i = 0; i < 130; i++) {
+          confettiList.push({
+            x: originX,
+            y: originY,
+            vx: (Math.random() - 0.5) * 23,
+            vy: (Math.random() - 0.72) * 23,
+            size: Math.random() * 8 + 4,
+            color: palette[Math.floor(Math.random() * palette.length)],
+            rotation: Math.random() * 360,
+            vRot: (Math.random() - 0.5) * 12
+          });
+        }
+      }
+
+      function spawnShockwave(x = window.innerWidth / 2, y = window.innerHeight / 2, color = "#f43f5e") {
+        shockwaves.push({ x, y, radius: 12, maxRadius: Math.max(window.innerWidth, window.innerHeight) * 0.65, alpha: 0.9, color });
+        for (let i = 0; i < 45; i++) {
+          const angle = Math.random() * Math.PI * 2;
+          const speed = Math.random() * 14 + 4;
+          sparks.push({
+            x,
+            y,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed,
+            life: 1,
+            color
+          });
+        }
+      }
+
+      function animateFx() {
+        if (fxCanvas && fxCtx) {
+          fxCtx.clearRect(0, 0, fxCanvas.width, fxCanvas.height);
+
+          for (let i = shockwaves.length - 1; i >= 0; i--) {
+            const sw = shockwaves[i];
+            sw.radius += 26;
+            sw.alpha -= 0.024;
+            if (sw.alpha <= 0 || sw.radius >= sw.maxRadius) {
+              shockwaves.splice(i, 1);
+              continue;
+            }
+            fxCtx.save();
+            fxCtx.beginPath();
+            fxCtx.arc(sw.x, sw.y, sw.radius, 0, Math.PI * 2);
+            fxCtx.strokeStyle = sw.color;
+            fxCtx.globalAlpha = Math.max(0, sw.alpha);
+            fxCtx.lineWidth = 4;
+            fxCtx.stroke();
+            fxCtx.restore();
+          }
+
+          for (let i = sparks.length - 1; i >= 0; i--) {
+            const sp = sparks[i];
+            sp.x += sp.vx;
+            sp.y += sp.vy;
+            sp.vx *= 0.96;
+            sp.vy *= 0.96;
+            sp.life -= 0.028;
+            if (sp.life <= 0) {
+              sparks.splice(i, 1);
+              continue;
+            }
+            fxCtx.save();
+            fxCtx.globalAlpha = Math.max(0, sp.life);
+            fxCtx.fillStyle = sp.color;
+            fxCtx.beginPath();
+            fxCtx.arc(sp.x, sp.y, 3, 0, Math.PI * 2);
+            fxCtx.fill();
+            fxCtx.restore();
+          }
+
+          for (let idx = confettiList.length - 1; idx >= 0; idx--) {
+            const p = confettiList[idx];
+            p.x += p.vx;
+            p.y += p.vy;
+            p.vy += 0.45;
+            p.rotation += p.vRot;
+            fxCtx.save();
+            fxCtx.translate(p.x, p.y);
+            fxCtx.rotate((p.rotation * Math.PI) / 180);
+            fxCtx.fillStyle = p.color;
+            fxCtx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+            fxCtx.restore();
+            if (p.y > fxCanvas.height + 30) confettiList.splice(idx, 1);
+          }
+        }
+        requestAnimationFrame(animateFx);
+      }
+
+      if (fxCanvas && fxCtx) {
+        window.addEventListener("resize", resizeFxCanvas);
+        resizeFxCanvas();
+        animateFx();
+      }
+
+      launchConfetti();
+      showToast(`🎉 Access Granted! Welcome to JunctionTeam HQ, ${displayName}.`);
+
+      document.getElementById("celebrateBtn")?.addEventListener("click", (e) => {
+        spawnShockwave(e.clientX, e.clientY, "#22d3ee");
+        launchConfetti(e.clientX, e.clientY);
+        showToast("⚡ Shockwave & confetti burst deployed!");
+      });
+
+      // 7. Modals & Command Palette
       const modalBackdrop = document.getElementById("universalModal");
       const modalTitle = document.getElementById("modalTitle");
       const modalBody = document.getElementById("modalBody");
@@ -1391,38 +1341,38 @@
 
       function openCommandPalette() {
         openModal("⌘ Quick Command Launcher", `
-          <input type="text" class="modal-input" id="cmdSearch" placeholder="Type a command or section..." style="width:100%;margin-bottom:12px;" autofocus />
+          <input type="text" class="input-dark" id="cmdSearch" placeholder="Filter commands or sections..." style="margin-bottom:12px;" autofocus />
           <div id="cmdList">
-            <div class="cmd-item" data-cmd="sec:contact"><span>💬 Jump to Contact &amp; Social Group</span><span class="kbd-hint">TAB</span></div>
-            <div class="cmd-item" data-cmd="sec:career"><span>💼 Jump to Career &amp; Growth Hub</span><span class="kbd-hint">TAB</span></div>
-            <div class="cmd-item" data-cmd="sec:hr"><span>👥 Jump to People &amp; HR Desk</span><span class="kbd-hint">TAB</span></div>
-            <div class="cmd-item" data-cmd="sec:product"><span>📦 Jump to Product &amp; UAT Command</span><span class="kbd-hint">TAB</span></div>
-            <div class="cmd-item" data-cmd="sec:entertainment"><span>🎮 Jump to Entertainment Lab</span><span class="kbd-hint">TAB</span></div>
-            <div class="cmd-item" data-cmd="act:confetti"><span>🎉 Trigger Confetti Celebration</span><span class="kbd-hint">FX</span></div>
-            <div class="cmd-item" data-cmd="act:game"><span>⚡ Launch Neon Core Hunter Mini-Game</span><span class="kbd-hint">PLAY</span></div>
+            <div class="cmd-row" data-cmd="sec:contact"><span>💬 Jump to Contact &amp; Social Group</span><span class="kbd-tag">TAB</span></div>
+            <div class="cmd-row" data-cmd="sec:career"><span>💼 Jump to Career &amp; Growth Hub</span><span class="kbd-tag">TAB</span></div>
+            <div class="cmd-row" data-cmd="sec:hr"><span>👥 Jump to People &amp; HR Desk</span><span class="kbd-tag">TAB</span></div>
+            <div class="cmd-row" data-cmd="sec:product"><span>📦 Jump to Product &amp; UAT Command</span><span class="kbd-tag">TAB</span></div>
+            <div class="cmd-row" data-cmd="sec:entertainment"><span>🎮 Jump to Entertainment Lab</span><span class="kbd-tag">TAB</span></div>
+            <div class="cmd-row" data-cmd="act:shake"><span>🚨 Trigger Full-Page Seismic Shake</span><span class="kbd-tag">FX</span></div>
+            <div class="cmd-row" data-cmd="act:game"><span>⚡ Launch Neon Core Hunter Mini-Game</span><span class="kbd-tag">PLAY</span></div>
           </div>
         `, () => {
           const searchInput = document.getElementById("cmdSearch");
-          const items = document.querySelectorAll(".cmd-item");
+          const rows = document.querySelectorAll(".cmd-row");
           searchInput?.addEventListener("input", () => {
             const q = searchInput.value.toLowerCase();
-            items.forEach((it) => {
-              it.style.display = it.textContent.toLowerCase().includes(q) ? "flex" : "none";
+            rows.forEach((r) => {
+              r.style.display = r.textContent.toLowerCase().includes(q) ? "flex" : "none";
             });
           });
-          items.forEach((it) => {
-            it.addEventListener("click", () => {
-              const cmd = it.dataset.cmd;
+          rows.forEach((r) => {
+            r.addEventListener("click", () => {
+              const cmd = r.dataset.cmd;
               closeModal();
               if (cmd.startsWith("sec:")) switchSection(cmd.split(":")[1]);
-              if (cmd === "act:confetti") { launchConfetti(); showToast("🎊 Confetti deployed!"); }
+              if (cmd === "act:shake") triggerPanicShake();
               if (cmd === "act:game") triggerModalKey("miniGame");
             });
           });
         });
       }
 
-      document.getElementById("cmdTriggerBtn")?.addEventListener("click", openCommandPalette);
+      document.getElementById("cmdBtn")?.addEventListener("click", openCommandPalette);
       document.addEventListener("keydown", (e) => {
         if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
           e.preventDefault();
@@ -1435,15 +1385,15 @@
       function triggerModalKey(key) {
         if (key === "socialChat") {
           openModal("🌐 JunctionTeam Live Group Wall", `
-            <div class="chat-feed" id="chatFeedBox"></div>
-            <div class="modal-input-row">
-              <input type="text" class="modal-input" id="chatInput" placeholder="Post an update to the team..." />
+            <div class="feed-box" id="chatFeedBox"></div>
+            <div style="display:flex;gap:8px;">
+              <input type="text" class="input-dark" id="chatInput" placeholder="Post an update to the team..." />
               <button type="button" class="action-btn" id="sendChatBtn" style="width:auto;padding:0 18px;">Send</button>
             </div>
           `, () => {
             const feed = document.getElementById("chatFeedBox");
             const renderFeed = () => {
-              feed.innerHTML = chatHistory.map(m => `<div class="chat-msg"><strong>${m.sender}:</strong> ${m.text}</div>`).join("");
+              feed.innerHTML = chatHistory.map(m => `<div class="feed-item"><strong>${m.sender}:</strong> ${m.text}</div>`).join("");
               feed.scrollTop = feed.scrollHeight;
             };
             renderFeed();
@@ -1461,7 +1411,7 @@
         } else if (key === "opsTicket") {
           openModal("📩 Raise Ops & Support Ping", `
             <p style="font-size:13.5px;color:#94a3b8;margin-bottom:12px;">Send an instant UAT or infrastructure request to the Ops desk.</p>
-            <input type="text" class="modal-input" id="opsSubject" placeholder="Subject (e.g., Custom Domain DNS / UAT Access)" style="width:100%;margin-bottom:10px;" />
+            <input type="text" class="input-dark" id="opsSubject" placeholder="Subject (e.g., Custom Domain DNS / UAT Access)" style="margin-bottom:10px;" />
             <button type="button" class="action-btn" id="submitOpsBtn">Dispatch Ping</button>
           `, () => {
             document.getElementById("submitOpsBtn").addEventListener("click", () => {
@@ -1472,8 +1422,8 @@
         } else if (key === "teamPoll") {
           openModal("📣 Live Squad Poll", `
             <p style="font-size:14px;margin-bottom:14px;">What should be our next JunctionTeam Friday theme?</p>
-            <button type="button" class="action-btn btn-purple" style="margin-bottom:8px;" data-vote="Gaming Tournament">🎮 Retro Arcade &amp; Gaming Tournament (58%)</button>
-            <button type="button" class="action-btn btn-emerald" style="margin-bottom:8px;" data-vote="Tech Lightning Talks">⚡ 5-Minute Tech Lightning Talks (27%)</button>
+            <button type="button" class="action-btn btn-violet" style="margin-bottom:8px;" data-vote="Gaming Tournament">🎮 Retro Arcade &amp; Gaming Tournament (58%)</button>
+            <button type="button" class="action-btn btn-lime" style="margin-bottom:8px;" data-vote="Tech Lightning Talks">⚡ 5-Minute Tech Lightning Talks (27%)</button>
             <button type="button" class="action-btn" data-vote="Rooftop Chai & Snacks">☕ Rooftop Chai &amp; Snacks Meetup (15%)</button>
           `, () => {
             modalBody.querySelectorAll("[data-vote]").forEach(btn => {
@@ -1486,9 +1436,9 @@
           });
         } else if (key === "careerTracks") {
           openModal("🧭 Role Progression Matrix", `
-            <div class="chat-msg" style="margin-bottom:10px;"><strong>Principal Systems &amp; Cloud Lead:</strong> Hybrid Identity, Zero-Trust Architecture, Multi-Platform Endpoint Automation.</div>
-            <div class="chat-msg" style="margin-bottom:10px;"><strong>Product &amp; Portal Architect:</strong> Full-Stack UAT Delivery, API Gateways, Interactive Telemetry UX.</div>
-            <div class="chat-msg"><strong>Security Operations Lead:</strong> SIEM/XDR Threat Hunting, DLP Governance &amp; Automated Incident Response.</div>
+            <div class="feed-item" style="margin-bottom:10px;"><strong>Principal Systems &amp; Cloud Lead:</strong> Hybrid Identity, Zero-Trust Architecture, Multi-Platform Endpoint Automation.</div>
+            <div class="feed-item" style="margin-bottom:10px;"><strong>Product &amp; Portal Architect:</strong> Full-Stack UAT Delivery, API Gateways, Interactive Telemetry UX.</div>
+            <div class="feed-item"><strong>Security Operations Lead:</strong> SIEM/XDR Threat Hunting, DLP Governance &amp; Automated Incident Response.</div>
           `);
         } else if (key === "skillChecklist") {
           openModal("📚 Quarter Skill Milestones", `
@@ -1504,7 +1454,7 @@
             <label style="display:flex;gap:10px;align-items:center;margin-bottom:14px;cursor:pointer;">
               <input type="checkbox" class="skill-chk" /> Advanced Graph API Automation Pipeline
             </label>
-            <button type="button" class="action-btn btn-purple" id="saveSkillsBtn">Sync Progress</button>
+            <button type="button" class="action-btn btn-violet" id="saveSkillsBtn">Sync Progress</button>
           `, () => {
             document.getElementById("saveSkillsBtn").addEventListener("click", () => {
               const chks = document.querySelectorAll(".skill-chk");
@@ -1518,9 +1468,9 @@
           });
         } else if (key === "goalBuilder") {
           openModal("🎯 1-on-1 Career Check-In Note", `
-            <input type="text" class="modal-input" placeholder="Key win this sprint..." style="width:100%;margin-bottom:10px;" />
-            <input type="text" class="modal-input" placeholder="Next focus area..." style="width:100%;margin-bottom:12px;" />
-            <button type="button" class="action-btn btn-emerald" id="saveGoalBtn">Save Check-In Note</button>
+            <input type="text" class="input-dark" placeholder="Key win this sprint..." style="margin-bottom:10px;" />
+            <input type="text" class="input-dark" placeholder="Next focus area..." style="margin-bottom:12px;" />
+            <button type="button" class="action-btn btn-lime" id="saveGoalBtn">Save Check-In Note</button>
           `, () => {
             document.getElementById("saveGoalBtn").addEventListener("click", () => {
               closeModal();
@@ -1529,15 +1479,15 @@
           });
         } else if (key === "hrPolicies") {
           openModal("📋 Employee Handbook Highlights", `
-            <div class="chat-msg" style="margin-bottom:10px;"><strong>Flexible Shift Handover:</strong> 30-minute overlap window for critical incident continuity.</div>
-            <div class="chat-msg" style="margin-bottom:10px;"><strong>Annual &amp; Casual Leave:</strong> 18 days accrued annually with instant digital approval.</div>
-            <div class="chat-msg"><strong>Learning Reimbursement:</strong> Cloud &amp; security certification vouchers covered upon passing.</div>
+            <div class="feed-item" style="margin-bottom:10px;"><strong>Flexible Shift Handover:</strong> 30-minute overlap window for critical incident continuity.</div>
+            <div class="feed-item" style="margin-bottom:10px;"><strong>Annual &amp; Casual Leave:</strong> 18 days accrued annually with instant digital approval.</div>
+            <div class="feed-item"><strong>Learning Reimbursement:</strong> Cloud &amp; security certification vouchers covered upon passing.</div>
           `);
         } else if (key === "leavePlanner") {
           openModal("🗓️ Interactive Leave Calculator", `
             <p style="font-size:13.5px;color:#94a3b8;margin-bottom:10px;">Select planned days off (Current Balance: <strong>18 Days</strong>):</p>
-            <input type="number" id="leaveDaysInp" class="modal-input" min="1" max="18" value="2" style="width:100%;margin-bottom:12px;" />
-            <button type="button" class="action-btn btn-emerald" id="calcLeaveBtn">Simulate Leave Request</button>
+            <input type="number" id="leaveDaysInp" class="input-dark" min="1" max="18" value="2" style="margin-bottom:12px;" />
+            <button type="button" class="action-btn btn-lime" id="calcLeaveBtn">Simulate Leave Request</button>
           `, () => {
             document.getElementById("calcLeaveBtn").addEventListener("click", () => {
               const days = parseInt(document.getElementById("leaveDaysInp").value || "1", 10);
@@ -1548,8 +1498,8 @@
           });
         } else if (key === "hrQuery") {
           openModal("🤝 Confidential HR Desk", `
-            <input type="text" class="modal-input" placeholder="Topic (Benefits, Payroll, Shift Roster)..." style="width:100%;margin-bottom:12px;" />
-            <button type="button" class="action-btn btn-purple" id="sendHrBtn">Submit to HR</button>
+            <input type="text" class="input-dark" placeholder="Topic (Benefits, Payroll, Shift Roster)..." style="margin-bottom:12px;" />
+            <button type="button" class="action-btn btn-violet" id="sendHrBtn">Submit to HR</button>
           `, () => {
             document.getElementById("sendHrBtn").addEventListener("click", () => {
               closeModal();
@@ -1558,21 +1508,21 @@
           });
         } else if (key === "uatInspector") {
           openModal("🛠️ Live Portal Diagnostics", `
-            <div class="chat-msg" style="margin-bottom:8px;"><strong>Auth Guard:</strong> Active (${displayName})</div>
-            <div class="chat-msg" style="margin-bottom:8px;"><strong>Host Origin:</strong> ${window.location.hostname || "Local Preview"}</div>
-            <div class="chat-msg" style="margin-bottom:8px;"><strong>Graphics Engine:</strong> 60fps Particle Network + 3D Tilt Active</div>
-            <div class="chat-msg"><strong>Viewport:</strong> ${window.innerWidth} × ${window.innerHeight}px</div>
+            <div class="feed-item" style="margin-bottom:8px;"><strong>Auth Guard:</strong> Active (${displayName})</div>
+            <div class="feed-item" style="margin-bottom:8px;"><strong>Host Origin:</strong> ${window.location.hostname || "Local Preview"}</div>
+            <div class="feed-item" style="margin-bottom:8px;"><strong>FX Engine:</strong> Shockwave Canvas + Radar Telemetry Active</div>
+            <div class="feed-item"><strong>Viewport:</strong> ${window.innerWidth} × ${window.innerHeight}px</div>
           `);
         } else if (key === "roadmapView") {
           openModal("🗺️ JunctionTeam Release Pipeline", `
-            <div class="chat-msg" style="margin-bottom:8px;">✅ <strong>v2.1:</strong> Custom Domain &amp; Auth Session Persistence</div>
-            <div class="chat-msg" style="margin-bottom:8px;">✅ <strong>v2.4:</strong> Pro Vector Graphics, 3D Cards &amp; Command Palette</div>
-            <div class="chat-msg">🚀 <strong>v3.0 (Next):</strong> Real-time Webhook Alerts &amp; Team Leaderboard</div>
+            <div class="feed-item" style="margin-bottom:8px;">✅ <strong>v2.1:</strong> Custom Domain &amp; Auth Session Persistence</div>
+            <div class="feed-item" style="margin-bottom:8px;">✅ <strong>v2.5:</strong> Full-Page Seismic FX, Radar HUD &amp; Command Palette</div>
+            <div class="feed-item">🚀 <strong>v3.0 (Next):</strong> Real-time Webhook Alerts &amp; Team Leaderboard</div>
           `);
         } else if (key === "bugLogger") {
           openModal("🧪 Log UAT Observation", `
-            <input type="text" class="modal-input" placeholder="Describe UAT observation or UI idea..." style="width:100%;margin-bottom:12px;" />
-            <button type="button" class="action-btn btn-emerald" id="saveBugBtn">Append to UAT Log</button>
+            <input type="text" class="input-dark" placeholder="Describe UAT observation or UI idea..." style="margin-bottom:12px;" />
+            <button type="button" class="action-btn btn-lime" id="saveBugBtn">Append to UAT Log</button>
           `, () => {
             document.getElementById("saveBugBtn").addEventListener("click", () => {
               closeModal();
@@ -1585,11 +1535,11 @@
           let gameInterval = null;
           openModal("⚡ Neon Core Hunter (15s Blitz)", `
             <div style="display:flex;justify-content:space-between;font-weight:700;font-size:14px;">
-              <span>Score: <strong id="gameScore" style="color:#38bdf8;">0</strong></span>
+              <span>Score: <strong id="gameScore" style="color:#a3e635;">0</strong></span>
               <span>Time: <strong id="gameTimer" style="color:#f472b6;">15s</strong></span>
             </div>
-            <div class="game-arena" id="gameArena">
-              <div class="game-orb" id="gameOrb" style="top:80px;left:180px;"></div>
+            <div class="arena-box" id="gameArena">
+              <div class="target-core" id="gameOrb" style="top:80px;left:180px;"></div>
             </div>
             <p style="font-size:12.5px;color:#94a3b8;">Click the glowing quantum core every time it teleports!</p>
           `, () => {
@@ -1600,8 +1550,8 @@
 
             const moveOrb = () => {
               if (!arena || !orb) return;
-              const maxX = arena.clientWidth - 46;
-              const maxY = arena.clientHeight - 46;
+              const maxX = arena.clientWidth - 48;
+              const maxY = arena.clientHeight - 48;
               orb.style.left = Math.max(4, Math.random() * maxX) + "px";
               orb.style.top = Math.max(4, Math.random() * maxY) + "px";
             };
@@ -1632,71 +1582,7 @@
         btn.addEventListener("click", () => triggerModalKey(btn.dataset.modal));
       });
 
-      // 9. Confetti Engine
-      const canvas = document.getElementById("confettiCanvas");
-      const ctx = canvas?.getContext("2d");
-      const particles = [];
-
-      function resizeCanvas() {
-        if (!canvas) return;
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-      }
-
-      function launchConfetti() {
-        if (!canvas || !ctx) return;
-        playTone(780, "triangle", 0.14);
-        const colors = ["#38bdf8", "#f472b6", "#facc15", "#4ade80", "#a855f7", "#fb7185"];
-        for (let i = 0; i < 140; i++) {
-          particles.push({
-            x: window.innerWidth / 2,
-            y: window.innerHeight / 2,
-            vx: (Math.random() - 0.5) * 24,
-            vy: (Math.random() - 0.7) * 24,
-            size: Math.random() * 8 + 4,
-            color: colors[Math.floor(Math.random() * colors.length)],
-            rotation: Math.random() * 360,
-            vRot: (Math.random() - 0.5) * 12
-          });
-        }
-      }
-
-      function animateConfetti() {
-        if (canvas && ctx) {
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          for (let idx = particles.length - 1; idx >= 0; idx--) {
-            const p = particles[idx];
-            p.x += p.vx;
-            p.y += p.vy;
-            p.vy += 0.45;
-            p.rotation += p.vRot;
-            ctx.save();
-            ctx.translate(p.x, p.y);
-            ctx.rotate((p.rotation * Math.PI) / 180);
-            ctx.fillStyle = p.color;
-            ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
-            ctx.restore();
-            if (p.y > canvas.height + 30) particles.splice(idx, 1);
-          }
-        }
-        requestAnimationFrame(animateConfetti);
-      }
-
-      if (canvas && ctx) {
-        window.addEventListener("resize", resizeCanvas);
-        resizeCanvas();
-        animateConfetti();
-      }
-
-      launchConfetti();
-      showToast(`🎉 Access Granted! Welcome to JunctionTeam HQ, ${displayName}.`);
-
-      document.getElementById("confettiBtn")?.addEventListener("click", () => {
-        launchConfetti();
-        showToast("🎊 Confetti deployed! You deserve it.");
-      });
-
-      // 10. Runaway Salary Button
+      // 8. Runaway Salary Button
       const runawayBtn = document.getElementById("runawayBtn");
       if (runawayBtn) {
         const taunts = [
@@ -1717,52 +1603,62 @@
           runawayBtn.textContent = taunts[dodgeCount % taunts.length];
         });
 
-        runawayBtn.addEventListener("click", () => {
-          launchConfetti();
+        runawayBtn.addEventListener("click", (e) => {
+          launchConfetti(e.clientX, e.clientY);
           runawayBtn.style.transform = "translate(0, 0)";
           runawayBtn.textContent = "Okay, you win! 🏆";
           showToast("🤯 Impressive reflexes! Bonus approved in spirit.");
         });
       }
 
-      // 11. Disco + Barrel Roll
-      document.getElementById("discoBtn")?.addEventListener("click", () => {
-        const main = document.getElementById("mainContainer");
+      // 9. Zero-G Float & Strobe Party Button
+      document.getElementById("discoBtn")?.addEventListener("click", (e) => {
+        const wrapper = document.getElementById("pageShakeWrapper");
         const chaosStat = document.getElementById("chaosStat");
-        const isDisco = document.body.classList.toggle("disco-mode");
-        if (chaosStat) chaosStat.textContent = isDisco ? "DISCO 🔥" : "LOW";
-        if (main) {
-          main.classList.remove("barrel-roll");
-          void main.offsetWidth;
-          main.classList.add("barrel-roll");
-        }
-        launchConfetti();
-        showToast("🕺 Party protocol initiated!");
+        const isStrobe = document.body.classList.toggle("strobe-fx");
+        wrapper?.classList.toggle("zero-gravity-mode", isStrobe);
+        if (chaosStat) chaosStat.textContent = isStrobe ? "ZERO-G ⚡" : "NOMINAL";
+        spawnShockwave(e.clientX, e.clientY, "#a855f7");
+        launchConfetti(e.clientX, e.clientY);
+        showToast(isStrobe ? "🕺 Zero-G & neon strobe engaged!" : "🛬 Gravity restored.");
       });
 
-      // 12. Forbidden Red Button
+      // 10. Forbidden Red Button — Full-Page Seismic Shake + Shockwave
       let panicClicks = 0;
       const panicMessages = [
         "⚠️ WARNING: You weren't supposed to press that!",
-        "🌋 Seismic activity detected in the server room!",
-        "🤖 Self-destruct cancelled... coffee machine activated instead ☕",
-        "🛑 Stop clicking! Gravity is barely holding this page together!"
+        "🌋 Seismic activity detected across the entire command deck!",
+        "🤖 Self-destruct cancelled... espresso overdrive engaged ☕",
+        "🛑 Stop clicking! Reality is vibrating at 60Hz!"
       ];
 
-      document.getElementById("panicBtn")?.addEventListener("click", () => {
-        playTone(150, "sawtooth", 0.25, 0.08);
-        document.body.classList.add("earthquake");
+      function triggerPanicShake(clientX = window.innerWidth / 2, clientY = window.innerHeight / 2) {
+        const wrapper = document.getElementById("pageShakeWrapper");
         const chaosStat = document.getElementById("chaosStat");
-        if (chaosStat) chaosStat.textContent = "CRITICAL 🚨";
         const statusEl = document.getElementById("funnyStatus");
+
+        playTone(135, "sawtooth", 0.3, 0.09);
+        document.body.classList.add("shake-active");
+        wrapper?.classList.add("mega-shake");
+        spawnShockwave(clientX, clientY, "#f43f5e");
+
+        if (chaosStat) chaosStat.textContent = "SEISMIC 🚨";
         const msg = panicMessages[panicClicks % panicMessages.length];
         if (statusEl) statusEl.textContent = msg;
         showToast(msg);
         panicClicks++;
-        setTimeout(() => document.body.classList.remove("earthquake"), 1200);
+
+        setTimeout(() => {
+          wrapper?.classList.remove("mega-shake");
+          document.body.classList.remove("shake-active");
+        }, 1250);
+      }
+
+      document.getElementById("panicBtn")?.addEventListener("click", (e) => {
+        triggerPanicShake(e.clientX, e.clientY);
       });
 
-      // 13. Logout
+      // 11. Logout
       document.getElementById("logoutBtn")?.addEventListener("click", () => {
         localStorage.removeItem("jt_session");
         sessionStorage.clear();
