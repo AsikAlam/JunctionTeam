@@ -1,4 +1,422 @@
-<script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JunctionTeam — UAT Portal</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #090d16 0%, #1e293b 50%, #090d16 100%);
+      color: #f8fafc;
+      padding: 20px;
+    }
+
+    .auth-card {
+      width: 100%;
+      max-width: 430px;
+      background: rgba(30, 41, 59, 0.85);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      border-radius: 18px;
+      padding: 32px 28px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.55);
+    }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+
+    .brand-left { display: flex; align-items: center; gap: 12px; }
+
+    .brand-badge {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 800;
+      box-shadow: 0 8px 18px rgba(59, 130, 246, 0.35);
+    }
+
+    .brand-title { font-size: 18px; font-weight: 700; color: #f1f5f9; }
+    .brand-sub { font-size: 12px; color: #94a3b8; }
+
+    .uat-pill {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.45);
+      color: #fcd34d;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+
+    .mode-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: rgba(15, 23, 42, 0.7);
+      padding: 4px;
+      border-radius: 12px;
+      border: 1px solid #334155;
+      margin-bottom: 20px;
+    }
+
+    .tab-btn {
+      padding: 9px;
+      border: none;
+      border-radius: 9px;
+      background: transparent;
+      color: #94a3b8;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+    }
+
+    h1 { font-size: 22px; font-weight: 700; margin-bottom: 5px; }
+    p.subtitle { font-size: 13.5px; color: #94a3b8; margin-bottom: 18px; }
+
+    .form-group { margin-bottom: 15px; }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: #cbd5e1;
+      margin-bottom: 6px;
+    }
+
+    .input-wrapper, .phone-row {
+      position: relative;
+      display: flex;
+      gap: 8px;
+    }
+
+    select, input {
+      padding: 11px 13px;
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid #334155;
+      border-radius: 10px;
+      color: #f8fafc;
+      font-size: 14.5px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input { width: 100%; }
+    select { width: 92px; flex-shrink: 0; cursor: pointer; }
+
+    input:focus, select:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+
+    .toggle-btn {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: #94a3b8;
+      font-size: 11.5px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 12px;
+      margin-top: 6px;
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      color: #ffffff;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s, opacity 0.2s;
+    }
+
+    .btn-submit:hover { opacity: 0.96; transform: translateY(-1px); }
+
+    .btn-secondary {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      background: transparent;
+      border: 1px solid #475569;
+      color: #cbd5e1;
+      border-radius: 10px;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-secondary:hover { border-color: #94a3b8; color: #fff; }
+
+    .otp-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
+      margin: 14px 0 18px;
+    }
+
+    .otp-digit {
+      text-align: center;
+      font-size: 20px;
+      font-weight: 700;
+      padding: 12px 0;
+    }
+
+    .sim-sms-banner {
+      background: rgba(56, 189, 248, 0.14);
+      border: 1px dashed rgba(56, 189, 248, 0.55);
+      color: #bae6fd;
+      font-size: 13px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      margin-bottom: 14px;
+      text-align: center;
+    }
+
+    .msg-box {
+      display: none;
+      font-size: 13px;
+      padding: 10px 12px;
+      border-radius: 9px;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    .msg-error {
+      background: rgba(239, 68, 68, 0.16);
+      border: 1px solid rgba(239, 68, 68, 0.45);
+      color: #fca5a5;
+    }
+
+    .msg-success {
+      background: rgba(16, 185, 129, 0.16);
+      border: 1px solid rgba(16, 185, 129, 0.45);
+      color: #6ee7b7;
+    }
+
+    .hidden-form { display: none; }
+
+    /* UAT Drawer */
+    .uat-footer {
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(148, 163, 184, 0.15);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: #64748b;
+    }
+
+    .uat-toggle-link {
+      background: none;
+      border: none;
+      color: #38bdf8;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    .uat-panel {
+      display: none;
+      margin-top: 12px;
+      padding: 12px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid #334155;
+      border-radius: 10px;
+      font-size: 12px;
+      color: #cbd5e1;
+    }
+
+    .uat-panel.open { display: block; }
+
+    .uat-list {
+      margin: 8px 0;
+      max-height: 110px;
+      overflow-y: auto;
+      font-family: monospace;
+      font-size: 11.5px;
+      color: #94a3b8;
+    }
+
+    .uat-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .uat-mini-btn {
+      flex: 1;
+      padding: 6px 8px;
+      border-radius: 6px;
+      border: 1px solid #475569;
+      background: #1e293b;
+      color: #e2e8f0;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .uat-mini-btn.danger {
+      border-color: rgba(239, 68, 68, 0.5);
+      color: #fca5a5;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="auth-card">
+    <div class="brand-row">
+      <div class="brand-left">
+        <div class="brand-badge">JT</div>
+        <div>
+          <div class="brand-title">JunctionTeam</div>
+          <div class="brand-sub">Workspace Portal</div>
+        </div>
+      </div>
+      <span class="uat-pill">UAT MODE</span>
+    </div>
+
+    <div class="mode-tabs">
+      <button type="button" class="tab-btn active" id="tabLogin">Sign In</button>
+      <button type="button" class="tab-btn" id="tabSignup">Sign Up</button>
+    </div>
+
+    <div id="msgBox" class="msg-box"></div>
+
+    <!-- SIGN IN FORM -->
+    <div id="loginSection">
+      <h1>Welcome Back</h1>
+      <p class="subtitle">Sign in using your username or verified mobile number</p>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="loginId">Username or Mobile Number</label>
+          <input type="text" id="loginId" placeholder="admin or 10-digit mobile" required autocomplete="username" />
+        </div>
+
+        <div class="form-group">
+          <label for="loginPass">Password</label>
+          <div class="input-wrapper">
+            <input type="password" id="loginPass" placeholder="Enter your password" required autocomplete="current-password" />
+            <button type="button" class="toggle-btn" data-target="loginPass">SHOW</button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit">Sign In</button>
+      </form>
+    </div>
+
+    <!-- SIGN UP STEP 1 -->
+    <div id="signupStep1" class="hidden-form">
+      <h1>Create Account</h1>
+      <p class="subtitle">Verify your mobile number via 6-digit OTP to register</p>
+
+      <form id="signupDetailsForm">
+        <div class="form-group">
+          <label for="signupUser">Full Name / Username</label>
+          <input type="text" id="signupUser" placeholder="e.g. Asik" required />
+        </div>
+
+        <div class="form-group">
+          <label for="signupPhone">Mobile Number</label>
+          <div class="phone-row">
+            <select id="countryCode" aria-label="Country Code">
+              <option value="+91" selected>+91</option>
+              <option value="+1">+1</option>
+              <option value="+44">+44</option>
+              <option value="+971">+971</option>
+            </select>
+            <input type="tel" id="signupPhone" placeholder="10-digit mobile number" pattern="[0-9]{10}" maxlength="10" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="signupPass">Create Password</label>
+          <div class="input-wrapper">
+            <input type="password" id="signupPass" placeholder="Min. 4 characters" minlength="4" required />
+            <button type="button" class="toggle-btn" data-target="signupPass">SHOW</button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit">Send Verification OTP</button>
+      </form>
+    </div>
+
+    <!-- SIGN UP STEP 2: OTP -->
+    <div id="signupStep2" class="hidden-form">
+      <h1>Verify Mobile Number</h1>
+      <p class="subtitle">Enter the 6-digit OTP sent to <strong id="displayPhone" style="color:#f8fafc;"></strong></p>
+
+      <div class="sim-sms-banner">
+        📱 UAT Test OTP: <strong id="generatedOtpText" style="font-size:16px;letter-spacing:2px;"></strong>
+      </div>
+
+      <form id="otpVerifyForm">
+        <div class="otp-grid">
+          <input type="text" inputmode="numeric" maxlength="1" class="otp-digit" required />
+          <input type="text" inputmode="numeric" maxlength="1" class="otp-digit" required />
+          <input type="text" inputmode="numeric" maxlength="1" class="otp-digit" required />
+          <input type="text" inputmode="numeric" maxlength="1" class="otp-digit" required />
+          <input type="text" inputmode="numeric" maxlength="1" class="otp-digit" required />
+          <input type="text" inputmode="numeric" maxlength="1" class="otp-digit" required />
+        </div>
+
+        <button type="submit" class="btn-submit">Verify OTP &amp; Create Account</button>
+        <button type="button" class="btn-secondary" id="resendOtpBtn">Resend OTP</button>
+        <button type="button" class="btn-secondary" id="editPhoneBtn">Change Mobile Number</button>
+      </form>
+    </div>
+
+    <!-- UAT FOOTER & TESTER DRAWER -->
+    <div class="uat-footer">
+      <span>Zero-Cost Local UAT Build</span>
+      <button type="button" class="uat-toggle-link" id="toggleUatBtn">UAT Test Tools</button>
+    </div>
+
+    <div class="uat-panel" id="uatPanel">
+      <strong>Stored UAT Accounts (Browser Local):</strong>
+      <div class="uat-list" id="uatAccountList"></div>
+      <div class="uat-actions">
+        <button type="button" class="uat-mini-btn" id="quickAdminBtn">Fill Demo Admin</button>
+        <button type="button" class="uat-mini-btn danger" id="clearUatBtn">Reset UAT Users</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
     document.addEventListener("DOMContentLoaded", () => {
       const tabLogin = document.getElementById("tabLogin");
       const tabSignup = document.getElementById("tabSignup");
@@ -16,12 +434,14 @@
       let activeOtp = "";
 
       function showMessage(text, type) {
+        if (!msgBox) return;
         msgBox.textContent = text;
         msgBox.className = "msg-box " + (type === "success" ? "msg-success" : "msg-error");
         msgBox.style.display = "block";
       }
 
       function hideMessage() {
+        if (!msgBox) return;
         msgBox.style.display = "none";
       }
 
@@ -33,12 +453,14 @@
 
       function renderUatList() {
         const listEl = document.getElementById("uatAccountList");
+        if (!listEl) return;
         const accounts = getStoredAccounts();
         listEl.innerHTML = accounts
           .map((a) => `• ${a.username} | ${a.phone} | pass: ${a.password}`)
           .join("<br>");
       }
 
+      // UAT Drawer Controls
       document.getElementById("toggleUatBtn")?.addEventListener("click", () => {
         renderUatList();
         document.getElementById("uatPanel")?.classList.toggle("open");
@@ -46,8 +468,10 @@
 
       document.getElementById("quickAdminBtn")?.addEventListener("click", () => {
         tabLogin.click();
-        document.getElementById("loginId").value = "admin";
-        document.getElementById("loginPass").value = "1234";
+        const loginIdEl = document.getElementById("loginId");
+        const loginPassEl = document.getElementById("loginPass");
+        if (loginIdEl) loginIdEl.value = "admin";
+        if (loginPassEl) loginPassEl.value = "1234";
         showMessage("Filled default UAT admin credentials.", "success");
       });
 
@@ -57,24 +481,26 @@
         showMessage("All custom UAT test accounts cleared.", "success");
       });
 
+      // Tab Switching
       tabLogin.addEventListener("click", () => {
         tabLogin.classList.add("active");
-        tabSignup.classList.remove("active");
+        tabSignup?.classList.remove("active");
         loginSection.classList.remove("hidden-form");
-        signupStep1.classList.add("hidden-form");
-        signupStep2.classList.add("hidden-form");
+        signupStep1?.classList.add("hidden-form");
+        signupStep2?.classList.add("hidden-form");
         hideMessage();
       });
 
-      tabSignup.addEventListener("click", () => {
+      tabSignup?.addEventListener("click", () => {
         tabSignup.classList.add("active");
         tabLogin.classList.remove("active");
-        signupStep1.classList.remove("hidden-form");
-        signupStep2.classList.add("hidden-form");
+        signupStep1?.classList.remove("hidden-form");
+        signupStep2?.classList.add("hidden-form");
         loginSection.classList.add("hidden-form");
         hideMessage();
       });
 
+      // Show / Hide Password
       document.querySelectorAll(".toggle-btn").forEach((btn) => {
         btn.addEventListener("click", () => {
           const input = document.getElementById(btn.dataset.target);
@@ -85,9 +511,11 @@
         });
       });
 
+      // OTP Logic
       function issueOtp() {
         activeOtp = Math.floor(100000 + Math.random() * 900000).toString();
-        document.getElementById("generatedOtpText").textContent = activeOtp;
+        const otpTextEl = document.getElementById("generatedOtpText");
+        if (otpTextEl) otpTextEl.textContent = activeOtp;
         const inputs = document.querySelectorAll(".otp-digit");
         inputs.forEach((inp) => (inp.value = ""));
         if (inputs[0]) inputs[0].focus();
@@ -104,7 +532,10 @@
         });
         input.addEventListener("paste", (e) => {
           e.preventDefault();
-          const pasted = (e.clipboardData || window.clipboardData).getData("text").replace(/\D/g, "").slice(0, 6);
+          const pasted = (e.clipboardData || window.clipboardData)
+            .getData("text")
+            .replace(/\D/g, "")
+            .slice(0, 6);
           pasted.split("").forEach((char, i) => {
             if (otpInputs[i]) otpInputs[i].value = char;
           });
@@ -112,14 +543,15 @@
         });
       });
 
+      // Sign Up Step 1
       document.getElementById("signupDetailsForm")?.addEventListener("submit", (e) => {
         e.preventDefault();
         hideMessage();
 
-        const username = document.getElementById("signupUser").value.trim();
-        const code = document.getElementById("countryCode").value;
-        const phone = document.getElementById("signupPhone").value.trim();
-        const password = document.getElementById("signupPass").value;
+        const username = document.getElementById("signupUser")?.value.trim() || "";
+        const code = document.getElementById("countryCode")?.value || "+91";
+        const phone = document.getElementById("signupPhone")?.value.trim() || "";
+        const password = document.getElementById("signupPass")?.value || "";
 
         const existing = getStoredAccounts().find(
           (a) => a.username.toLowerCase() === username.toLowerCase() || a.phone === phone
@@ -129,14 +561,23 @@
           return;
         }
 
-        pendingSignup = { username, phone, fullPhone: `${code} ${phone}`, password, verified: true };
-        document.getElementById("displayPhone").textContent = pendingSignup.fullPhone;
+        pendingSignup = {
+          username,
+          phone,
+          fullPhone: `${code} ${phone}`,
+          password,
+          verified: true
+        };
 
-        signupStep1.classList.add("hidden-form");
-        signupStep2.classList.remove("hidden-form");
+        const displayPhoneEl = document.getElementById("displayPhone");
+        if (displayPhoneEl) displayPhoneEl.textContent = pendingSignup.fullPhone;
+
+        signupStep1?.classList.add("hidden-form");
+        signupStep2?.classList.remove("hidden-form");
         issueOtp();
       });
 
+      // Sign Up Step 2: Verify OTP
       document.getElementById("otpVerifyForm")?.addEventListener("submit", (e) => {
         e.preventDefault();
         const enteredOtp = Array.from(otpInputs).map((i) => i.value).join("");
@@ -150,11 +591,14 @@
         saved.push(pendingSignup);
         localStorage.setItem("jt_accounts", JSON.stringify(saved));
 
-        localStorage.setItem("jt_session", JSON.stringify({
-          username: pendingSignup.username,
-          phone: pendingSignup.phone,
-          loginTime: new Date().toISOString()
-        }));
+        localStorage.setItem(
+          "jt_session",
+          JSON.stringify({
+            username: pendingSignup.username,
+            phone: pendingSignup.phone,
+            loginTime: new Date().toISOString()
+          })
+        );
 
         showMessage("Account verified! Redirecting to dashboard...", "success");
         setTimeout(() => {
@@ -168,17 +612,18 @@
       });
 
       document.getElementById("editPhoneBtn")?.addEventListener("click", () => {
-        signupStep2.classList.add("hidden-form");
-        signupStep1.classList.remove("hidden-form");
+        signupStep2?.classList.add("hidden-form");
+        signupStep1?.classList.remove("hidden-form");
         hideMessage();
       });
 
+      // Sign In Handler
       document.getElementById("loginForm")?.addEventListener("submit", (e) => {
         e.preventDefault();
         hideMessage();
 
-        const loginId = document.getElementById("loginId").value.trim();
-        const loginPass = document.getElementById("loginPass").value;
+        const loginId = document.getElementById("loginId")?.value.trim() || "";
+        const loginPass = document.getElementById("loginPass")?.value || "";
 
         const accounts = getStoredAccounts();
         const matched = accounts.find(
@@ -192,11 +637,14 @@
           return;
         }
 
-        localStorage.setItem("jt_session", JSON.stringify({
-          username: matched.username,
-          phone: matched.phone,
-          loginTime: new Date().toISOString()
-        }));
+        localStorage.setItem(
+          "jt_session",
+          JSON.stringify({
+            username: matched.username,
+            phone: matched.phone,
+            loginTime: new Date().toISOString()
+          })
+        );
 
         showMessage("Login successful! Redirecting...", "success");
         setTimeout(() => {
