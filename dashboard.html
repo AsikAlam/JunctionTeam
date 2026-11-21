@@ -387,3 +387,504 @@
 
     @keyframes discoBg {
       0% { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(360deg); }
+    }
+
+    .barrel-roll {
+      animation: spinPage 1.2s ease-in-out;
+    }
+
+    @keyframes spinPage {
+      0% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(180deg) scale(0.8); }
+      100% { transform: rotate(360deg) scale(1); }
+    }
+
+    .earthquake {
+      animation: shakeScreen 0.45s infinite;
+    }
+
+    @keyframes shakeScreen {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      25% { transform: translate(-6px, 4px) rotate(-1deg); }
+      50% { transform: translate(6px, -4px) rotate(1deg); }
+      75% { transform: translate(-4px, -3px) rotate(-0.5deg); }
+    }
+
+    /* Toast Notification */
+    #toast {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: #1e293b;
+      border: 1px solid #38bdf8;
+      color: #f8fafc;
+      padding: 14px 20px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+      transform: translateY(120px);
+      opacity: 0;
+      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      z-index: 1000;
+    }
+
+    #toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <script>
+    let activeSession = null;
+    try {
+      activeSession = JSON.parse(localStorage.getItem("jt_session") || "null");
+    } catch (_) {
+      activeSession = null;
+    }
+
+    const isSessionStorageAuth = sessionStorage.getItem("isLoggedIn") === "true";
+    if (!activeSession && !isSessionStorageAuth) {
+      window.location.href = "index.html";
+    }
+  </script>
+
+  <!-- Ambient Floating Orbs -->
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-orb orb-3"></div>
+
+  <!-- Confetti Layer -->
+  <canvas id="confettiCanvas"></canvas>
+
+  <header>
+    <div class="logo" id="brandHome" title="Return to HQ Overview">
+      <span class="rocket-icon">🚀</span> JunctionTeam HQ
+    </div>
+
+    <button type="button" class="menu-toggle-btn" id="mobileMenuBtn" aria-expanded="false">
+      ☰ Menu
+    </button>
+
+    <nav class="top-nav" id="topNav" aria-label="Workspace Sections">
+      <button type="button" class="nav-btn" data-section="contact">💬 Contact &amp; Social Group</button>
+      <button type="button" class="nav-btn" data-section="career">💼 Career</button>
+      <button type="button" class="nav-btn" data-section="hr">👥 HR</button>
+      <button type="button" class="nav-btn" data-section="product">📦 Product</button>
+      <button type="button" class="nav-btn active" data-section="entertainment">🎮 Entertainment</button>
+    </nav>
+
+    <div class="header-actions">
+      <button type="button" class="btn-pill btn-party" id="confettiBtn">🎉 Celebrate</button>
+      <button type="button" class="btn-pill logout-btn" id="logoutBtn">Escape / Logout</button>
+    </div>
+  </header>
+
+  <main id="mainContainer">
+    <div class="hero-card">
+      <div class="badge-live">
+        <span class="pulse-dot"></span> CLEARANCE LEVEL: SUPREME BOSS
+      </div>
+      <h1>Welcome inside, <span id="userDisplay" style="color:#38bdf8;">Admin</span>! 😎</h1>
+      <p class="subtitle" id="funnyStatus">
+        Use the top menu to jump between Contact &amp; Social Group, Career, HR, Product, and Entertainment. Warning: Do not press any red buttons unless you are ready for pure chaos.
+      </p>
+    </div>
+
+    <!-- 1. CONTACT US & SOCIAL GROUP SECTION -->
+    <section class="section-pane" id="sec-contact">
+      <div class="section-header-row">
+        <h2 class="section-title">💬 Contact Us &amp; Social Group</h2>
+        <button type="button" class="back-hq-btn" data-go="entertainment">Go to Entertainment HQ</button>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div>
+            <span class="meta-tag">COMMUNITY CHANNEL</span>
+            <div class="card-emoji">🌐</div>
+            <h2>JunctionTeam Social Group</h2>
+            <p>Join team announcements, daily shoutouts, UAT release notes, and cross-team discussions in the shared social hub.</p>
+          </div>
+          <button type="button" class="action-btn btn-purple" data-toast="🌐 Opened JunctionTeam Social Group thread (UAT preview).">Open Social Group</button>
+        </div>
+
+        <div class="card">
+          <div>
+            <span class="meta-tag">DIRECT DESK</span>
+            <div class="card-emoji">📩</div>
+            <h2>Contact Support &amp; Ops</h2>
+            <p>Need quick assistance with portal access, UAT test accounts, or workspace requests? Ping the operations desk.</p>
+          </div>
+          <button type="button" class="action-btn" data-toast="📩 Support ticket note logged for JunctionTeam Ops.">Send Quick Ping</button>
+        </div>
+
+        <div class="card">
+          <div>
+            <span class="meta-tag">TEAM DIRECTORY</span>
+            <div class="card-emoji">📣</div>
+            <h2>Broadcast &amp; Events</h2>
+            <p>Share festive greetings, community polls, and weekly team check-ins with everyone in the group.</p>
+          </div>
+          <button type="button" class="action-btn btn-emerald" data-toast="📣 Community broadcast preview ready!">Create Group Note</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. CAREER SECTION -->
+    <section class="section-pane" id="sec-career">
+      <div class="section-header-row">
+        <h2 class="section-title">💼 Career Section</h2>
+        <button type="button" class="back-hq-btn" data-go="entertainment">Go to Entertainment HQ</button>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div>
+            <span class="meta-tag">OPEN ROLES</span>
+            <div class="card-emoji">🧭</div>
+            <h2>Growth &amp; Internal Openings</h2>
+            <p>Explore role progressions, skill tracks, and cross-functional opportunities across systems, product, and operations.</p>
+          </div>
+          <button type="button" class="action-btn" data-toast="🧭 Career roadmap &amp; role tracks loaded.">View Career Tracks</button>
+        </div>
+
+        <div class="card">
+          <div>
+            <span class="meta-tag">SKILL MATRIX</span>
+            <div class="card-emoji">📚</div>
+            <h2>Learning &amp; Certifications</h2>
+            <p>Track hands-on labs, architecture notes, and technical interview prep milestones in one place.</p>
+          </div>
+          <button type="button" class="action-btn btn-purple" data-toast="📚 Learning checklist synced for your profile.">Open Skill Tracker</button>
+        </div>
+
+        <div class="card">
+          <div>
+            <span class="meta-tag">MENTORSHIP</span>
+            <div class="card-emoji">🎯</div>
+            <h2>Career Check-Ins</h2>
+            <p>Prepare talking points, recent wins, and next-quarter goals for your career review sessions.</p>
+          </div>
+          <button type="button" class="action-btn btn-emerald" data-toast="🎯 Career review notes template ready.">Start Goal Note</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. HR SECTION -->
+    <section class="section-pane" id="sec-hr">
+      <div class="section-header-row">
+        <h2 class="section-title">👥 HR Section</h2>
+        <button type="button" class="back-hq-btn" data-go="entertainment">Go to Entertainment HQ</button>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div>
+            <span class="meta-tag">PEOPLE &amp; POLICY</span>
+            <div class="card-emoji">📋</div>
+            <h2>Employee Handbook &amp; Policies</h2>
+            <p>Quick access to leave guidelines, shift schedules, workplace policies, and onboarding checklists.</p>
+          </div>
+          <button type="button" class="action-btn" data-toast="📋 HR policies &amp; guidelines summary opened.">View Policies</button>
+        </div>
+
+        <div class="card">
+          <div>
+            <span class="meta-tag">ATTENDANCE &amp; LEAVE</span>
+            <div class="card-emoji">🗓️</div>
+            <h2>Leave &amp; Shift Planner</h2>
+            <p>Check upcoming holidays, plan time off, and keep track of shift handovers without guesswork.</p>
+          </div>
+          <button type="button" class="action-btn btn-emerald" data-toast="🗓️ Leave &amp; shift calendar view ready.">Check Planner</button>
+        </div>
+
+        <div class="card">
+          <div>
+            <span class="meta-tag">HELP DESK</span>
+            <div class="card-emoji">🤝</div>
+            <h2>HR Queries &amp; Benefits</h2>
+            <p>Submit HR requests, verify documentation status, or review perks and wellness benefits.</p>
+          </div>
+          <button type="button" class="action-btn btn-purple" data-toast="🤝 HR helpdesk request draft created.">Contact HR Desk</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. PRODUCT SECTION -->
+    <section class="section-pane" id="sec-product">
+      <div class="section-header-row">
+        <h2 class="section-title">📦 Product Section</h2>
+        <button type="button" class="back-hq-btn" data-go="entertainment">Go to Entertainment HQ</button>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div>
+            <span class="meta-tag">UAT &amp; RELEASES</span>
+            <div class="card-emoji">🛠️</div>
+            <h2>JunctionTeam Portal (UAT)</h2>
+            <p>Review current portal builds, login/OTP flows, and user acceptance testing notes before production rollout.</p>
+          </div>
+          <button type="button" class="action-btn" data-toast="🛠️ UAT build status: Portal &amp; HQ active.">Inspect UAT Build</button>
+        </div>
+
+        <div class="card">
+          <div>
+            <span class="meta-tag">ROADMAP</span>
+            <div class="card-emoji">🗺️</div>
+            <h2>Feature Pipeline</h2>
+            <p>Track planned enhancements, UI refinements, and upcoming modules across the JunctionTeam suite.</p>
+          </div>
+          <button type="button" class="action-btn btn-purple" data-toast="🗺️ Product roadmap milestones loaded.">View Roadmap</button>
+        </div>
+
+        <div class="card">
+          <div>
+            <span class="meta-tag">FEEDBACK</span>
+            <div class="card-emoji">🧪</div>
+            <h2>Bug &amp; Idea Log</h2>
+            <p>Capture quick UAT observations, edge cases, and improvement ideas while testing new features.</p>
+          </div>
+          <button type="button" class="action-btn btn-emerald" data-toast="🧪 UAT feedback note recorded.">Log UAT Note</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. ENTERTAINMENT SECTION (DEFAULT ACTIVE HQ CARDS) -->
+    <section class="section-pane active" id="sec-entertainment">
+      <div class="section-header-row">
+        <h2 class="section-title">🎮 Entertainment Zone</h2>
+      </div>
+      <div class="grid">
+        <!-- Card 1: Runaway Salary / Bonus Button -->
+        <div class="card">
+          <div>
+            <div class="card-emoji">💸</div>
+            <h2>Instant 500% Salary Hike</h2>
+            <p>Click the button below to immediately approve an unlimited bonus and extra paid vacations.</p>
+          </div>
+          <button type="button" class="action-btn" id="runawayBtn">Claim Bonus Now</button>
+        </div>
+
+        <!-- Card 2: Barrel Roll & Disco -->
+        <div class="card">
+          <div>
+            <div class="card-emoji">🕺</div>
+            <h2>Emergency Dance Break</h2>
+            <p>Feeling stressed? Activate full-screen RGB party mode and execute an aerodynamic 360° barrel roll.</p>
+          </div>
+          <button type="button" class="action-btn btn-purple" id="discoBtn">Activate Disco Mode</button>
+        </div>
+
+        <!-- Card 3: Do Not Press Red Button -->
+        <div class="card">
+          <div>
+            <div class="card-emoji">🚨</div>
+            <h2>The Forbidden Red Button</h2>
+            <p>Seriously, don't touch this. We don't even know what the previous developer wired it to.</p>
+          </div>
+          <button type="button" class="action-btn btn-danger" id="panicBtn">DO NOT PRESS</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast">Message here</div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const user =
+        (activeSession && activeSession.username) ||
+        sessionStorage.getItem("loggedUser") ||
+        "Admin";
+      const userDisplay = document.getElementById("userDisplay");
+      if (userDisplay && user) {
+        userDisplay.textContent = user.charAt(0).toUpperCase() + user.slice(1);
+      }
+
+      const toast = document.getElementById("toast");
+      let toastTimer;
+      function showToast(msg) {
+        if (!toast) return;
+        toast.textContent = msg;
+        toast.classList.add("show");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.remove("show"), 3200);
+      }
+
+      // Top menu navigation
+      const navButtons = document.querySelectorAll(".nav-btn");
+      const sectionPanes = document.querySelectorAll(".section-pane");
+      const topNav = document.getElementById("topNav");
+      const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+
+      function switchSection(sectionKey) {
+        navButtons.forEach((btn) => {
+          btn.classList.toggle("active", btn.dataset.section === sectionKey);
+        });
+        sectionPanes.forEach((pane) => {
+          pane.classList.toggle("active", pane.id === `sec-${sectionKey}`);
+        });
+        if (topNav && mobileMenuBtn) {
+          topNav.classList.remove("open");
+          mobileMenuBtn.setAttribute("aria-expanded", "false");
+        }
+      }
+
+      navButtons.forEach((btn) => {
+        btn.addEventListener("click", () => switchSection(btn.dataset.section));
+      });
+
+      document.querySelectorAll(".back-hq-btn[data-go]").forEach((btn) => {
+        btn.addEventListener("click", () => switchSection(btn.dataset.go));
+      });
+
+      document.querySelectorAll("[data-toast]").forEach((btn) => {
+        btn.addEventListener("click", () => showToast(btn.dataset.toast));
+      });
+
+      document.getElementById("brandHome")?.addEventListener("click", () => {
+        switchSection("entertainment");
+      });
+
+      mobileMenuBtn?.addEventListener("click", () => {
+        if (!topNav) return;
+        const isOpen = topNav.classList.toggle("open");
+        mobileMenuBtn.setAttribute("aria-expanded", String(isOpen));
+      });
+
+      // Confetti engine
+      const canvas = document.getElementById("confettiCanvas");
+      const ctx = canvas && canvas.getContext ? canvas.getContext("2d") : null;
+      const particles = [];
+
+      function resizeCanvas() {
+        if (!canvas) return;
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+
+      function launchConfetti() {
+        if (!canvas || !ctx) return;
+        const colors = ["#38bdf8", "#f472b6", "#facc15", "#4ade80", "#a855f7", "#fb7185"];
+        for (let i = 0; i < 130; i++) {
+          particles.push({
+            x: window.innerWidth / 2,
+            y: window.innerHeight / 2,
+            vx: (Math.random() - 0.5) * 22,
+            vy: (Math.random() - 0.7) * 22,
+            size: Math.random() * 8 + 4,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            rotation: Math.random() * 360,
+            vRot: (Math.random() - 0.5) * 12
+          });
+        }
+      }
+
+      function animateConfetti() {
+        if (canvas && ctx) {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          for (let idx = particles.length - 1; idx >= 0; idx--) {
+            const p = particles[idx];
+            p.x += p.vx;
+            p.y += p.vy;
+            p.vy += 0.45;
+            p.rotation += p.vRot;
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            ctx.rotate((p.rotation * Math.PI) / 180);
+            ctx.fillStyle = p.color;
+            ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+            ctx.restore();
+            if (p.y > canvas.height + 30) particles.splice(idx, 1);
+          }
+        }
+        requestAnimationFrame(animateConfetti);
+      }
+
+      if (canvas && ctx) {
+        window.addEventListener("resize", resizeCanvas);
+        resizeCanvas();
+        animateConfetti();
+      }
+
+      // Welcome animation + toast on load
+      launchConfetti();
+      showToast("🎉 Access Granted! Welcome to JunctionTeam HQ.");
+
+      document.getElementById("confettiBtn")?.addEventListener("click", () => {
+        launchConfetti();
+        showToast("🎊 Confetti deployed! You deserve it.");
+      });
+
+      // Runaway button
+      const runawayBtn = document.getElementById("runawayBtn");
+      if (runawayBtn) {
+        const taunts = [
+          "Too slow! 😜",
+          "Nice try, Boss!",
+          "Budget error 404 😂",
+          "Catch me if you can!",
+          "Almost had it! 🏃‍♂️💨"
+        ];
+        let dodgeCount = 0;
+
+        runawayBtn.addEventListener("mouseover", () => {
+          dodgeCount++;
+          const x = (Math.random() - 0.5) * 260;
+          const y = (Math.random() - 0.5) * 180;
+          runawayBtn.style.transform = `translate(${x}px, ${y}px)`;
+          runawayBtn.textContent = taunts[dodgeCount % taunts.length];
+        });
+
+        runawayBtn.addEventListener("click", () => {
+          launchConfetti();
+          runawayBtn.style.transform = "translate(0, 0)";
+          runawayBtn.textContent = "Okay, you win! 🏆";
+          showToast("🤯 Impressive reflexes! Bonus approved in spirit.");
+        });
+      }
+
+      // Disco + barrel roll
+      document.getElementById("discoBtn")?.addEventListener("click", () => {
+        const main = document.getElementById("mainContainer");
+        document.body.classList.toggle("disco-mode");
+        if (main) {
+          main.classList.remove("barrel-roll");
+          void main.offsetWidth;
+          main.classList.add("barrel-roll");
+        }
+        launchConfetti();
+        showToast("🕺 Party protocol initiated!");
+      });
+
+      // Forbidden red button
+      let panicClicks = 0;
+      const panicMessages = [
+        "⚠️ WARNING: You weren't supposed to press that!",
+        "🌋 Seismic activity detected in the server room!",
+        "🤖 Self-destruct cancelled... coffee machine activated instead ☕",
+        "🛑 Stop clicking! Gravity is barely holding this page together!"
+      ];
+
+      document.getElementById("panicBtn")?.addEventListener("click", () => {
+        document.body.classList.add("earthquake");
+        const statusEl = document.getElementById("funnyStatus");
+        const msg = panicMessages[panicClicks % panicMessages.length];
+        if (statusEl) statusEl.textContent = msg;
+        showToast(msg);
+        panicClicks++;
+        setTimeout(() => document.body.classList.remove("earthquake"), 1200);
+      });
+
+      // Logout
+      document.getElementById("logoutBtn")?.addEventListener("click", () => {
+        localStorage.removeItem("jt_session");
+        sessionStorage.clear();
+        window.location.href = "index.html";
+      });
+    });
+  </script>
+
+</body>
+</html>
