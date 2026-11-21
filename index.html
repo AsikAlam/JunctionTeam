@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>JunctionTeam — UAT Portal</title>
+  <title>JunctionTeam — Workspace Portal</title>
   <style>
     * {
       box-sizing: border-box;
@@ -18,94 +18,198 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, #090d16 0%, #1e293b 50%, #090d16 100%);
+      background: #070b14;
       color: #f8fafc;
       padding: 20px;
+      position: relative;
+      overflow-x: hidden;
     }
 
+    /* Animated Aurora Backdrop */
+    .aurora-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 18% 22%, rgba(59, 130, 246, 0.24), transparent 42%),
+        radial-gradient(circle at 82% 28%, rgba(139, 92, 246, 0.22), transparent 45%),
+        radial-gradient(circle at 52% 85%, rgba(6, 182, 212, 0.18), transparent 48%);
+      animation: auroraDrift 14s ease-in-out infinite alternate;
+    }
+
+    .grid-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(148, 163, 184, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(148, 163, 184, 0.05) 1px, transparent 1px);
+      background-size: 36px 36px;
+      mask-image: radial-gradient(ellipse at center, black 35%, transparent 82%);
+    }
+
+    @keyframes auroraDrift {
+      0% { transform: scale(1) translate(0, 0); }
+      100% { transform: scale(1.08) translate(16px, -14px); }
+    }
+
+    @keyframes cardEnter {
+      from {
+        opacity: 0;
+        transform: translateY(18px) scale(0.985);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Glass Card with Subtle Gradient Rim */
     .auth-card {
+      position: relative;
+      z-index: 1;
       width: 100%;
-      max-width: 430px;
-      background: rgba(30, 41, 59, 0.85);
-      backdrop-filter: blur(14px);
-      border: 1px solid rgba(148, 163, 184, 0.16);
-      border-radius: 18px;
+      max-width: 440px;
+      background: rgba(15, 23, 42, 0.82);
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-radius: 22px;
       padding: 32px 28px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.55);
+      box-shadow:
+        0 28px 60px -15px rgba(0, 0, 0, 0.7),
+        0 0 0 1px rgba(56, 189, 248, 0.08) inset;
+      animation: cardEnter 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+      transition: box-shadow 0.35s ease, border-color 0.35s ease;
+    }
+
+    .auth-card::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: 22px;
+      padding: 1px;
+      background: linear-gradient(
+        135deg,
+        rgba(56, 189, 248, 0.45),
+        rgba(139, 92, 246, 0.2),
+        rgba(236, 72, 153, 0.35)
+      );
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    .auth-card.auth-granted {
+      border-color: rgba(16, 185, 129, 0.7);
+      box-shadow:
+        0 28px 60px -15px rgba(0, 0, 0, 0.75),
+        0 0 36px rgba(16, 185, 129, 0.28);
     }
 
     .brand-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 18px;
+      margin-bottom: 20px;
     }
 
     .brand-left { display: flex; align-items: center; gap: 12px; }
 
     .brand-badge {
-      width: 44px;
-      height: 44px;
-      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-      border-radius: 12px;
+      width: 46px;
+      height: 46px;
+      background: linear-gradient(135deg, #38bdf8, #3b82f6 50%, #8b5cf6);
+      border-radius: 14px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 20px;
       font-weight: 800;
-      box-shadow: 0 8px 18px rgba(59, 130, 246, 0.35);
+      letter-spacing: -0.5px;
+      box-shadow: 0 10px 24px rgba(59, 130, 246, 0.38);
+      transition: transform 0.3s ease;
     }
 
-    .brand-title { font-size: 18px; font-weight: 700; color: #f1f5f9; }
+    .brand-badge:hover {
+      transform: translateY(-2px) rotate(-3deg);
+    }
+
+    .brand-title { font-size: 18.5px; font-weight: 800; color: #f8fafc; letter-spacing: -0.2px; }
     .brand-sub { font-size: 12px; color: #94a3b8; }
 
-    .uat-pill {
-      background: rgba(245, 158, 11, 0.15);
-      border: 1px solid rgba(245, 158, 11, 0.45);
-      color: #fcd34d;
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(16, 185, 129, 0.14);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #6ee7b7;
       font-size: 11px;
       font-weight: 700;
-      padding: 4px 10px;
+      letter-spacing: 0.4px;
+      padding: 5px 11px;
       border-radius: 999px;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 8px #10b981;
     }
 
     .mode-tabs {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      background: rgba(15, 23, 42, 0.7);
+      background: rgba(9, 13, 22, 0.75);
       padding: 4px;
-      border-radius: 12px;
-      border: 1px solid #334155;
-      margin-bottom: 20px;
+      border-radius: 13px;
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      margin-bottom: 22px;
     }
 
     .tab-btn {
       padding: 9px;
       border: none;
-      border-radius: 9px;
+      border-radius: 10px;
       background: transparent;
       color: #94a3b8;
       font-size: 14px;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.22s ease;
     }
+
+    .tab-btn:hover { color: #e2e8f0; }
 
     .tab-btn.active {
-      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
       color: #ffffff;
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+      box-shadow: 0 6px 16px rgba(59, 130, 246, 0.35);
     }
 
-    h1 { font-size: 22px; font-weight: 700; margin-bottom: 5px; }
-    p.subtitle { font-size: 13.5px; color: #94a3b8; margin-bottom: 18px; }
+    h1 {
+      font-size: 23px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      margin-bottom: 5px;
+      background: linear-gradient(90deg, #ffffff, #cbd5e1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    p.subtitle { font-size: 13.5px; color: #94a3b8; margin-bottom: 18px; line-height: 1.45; }
 
     .form-group { margin-bottom: 15px; }
 
     label {
       display: block;
       font-size: 13px;
-      font-weight: 500;
+      font-weight: 600;
       color: #cbd5e1;
       margin-bottom: 6px;
     }
@@ -117,22 +221,24 @@
     }
 
     select, input {
-      padding: 11px 13px;
-      background: rgba(15, 23, 42, 0.75);
-      border: 1px solid #334155;
-      border-radius: 10px;
+      padding: 11.5px 14px;
+      background: rgba(9, 13, 22, 0.78);
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      border-radius: 11px;
       color: #f8fafc;
       font-size: 14.5px;
       outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
+      transition: border-color 0.22s ease, box-shadow 0.22s ease, background-color 0.22s ease;
     }
 
     input { width: 100%; }
-    select { width: 92px; flex-shrink: 0; cursor: pointer; }
+    input[type="password"] { padding-right: 62px; }
+    select { width: 94px; flex-shrink: 0; cursor: pointer; }
 
     input:focus, select:focus {
-      border-color: #3b82f6;
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+      background: rgba(15, 23, 42, 0.95);
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
     }
 
     .toggle-btn {
@@ -140,44 +246,64 @@
       right: 12px;
       top: 50%;
       transform: translateY(-50%);
-      background: none;
-      border: none;
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-radius: 6px;
+      padding: 3px 7px;
       color: #94a3b8;
-      font-size: 11.5px;
+      font-size: 10.5px;
       cursor: pointer;
       font-weight: 700;
+      transition: color 0.2s, border-color 0.2s;
     }
 
+    .toggle-btn:hover { color: #f8fafc; border-color: #38bdf8; }
+
     .btn-submit {
+      position: relative;
+      overflow: hidden;
       width: 100%;
-      padding: 12px;
+      padding: 12.5px;
       margin-top: 6px;
-      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      background: linear-gradient(135deg, #38bdf8 0%, #3b82f6 50%, #7c3aed 100%);
+      background-size: 200% 200%;
       color: #ffffff;
       border: none;
-      border-radius: 10px;
+      border-radius: 11px;
       font-size: 15px;
       font-weight: 700;
       cursor: pointer;
-      transition: transform 0.15s, opacity 0.2s;
+      box-shadow: 0 10px 24px rgba(59, 130, 246, 0.35);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background-position 0.4s ease;
     }
 
-    .btn-submit:hover { opacity: 0.96; transform: translateY(-1px); }
+    .btn-submit:hover {
+      transform: translateY(-1.5px);
+      background-position: 100% 0;
+      box-shadow: 0 14px 28px rgba(99, 102, 241, 0.42);
+    }
+
+    .btn-submit:active { transform: translateY(0) scale(0.99); }
 
     .btn-secondary {
       width: 100%;
       padding: 10px;
       margin-top: 8px;
-      background: transparent;
-      border: 1px solid #475569;
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid rgba(148, 163, 184, 0.25);
       color: #cbd5e1;
       border-radius: 10px;
       font-size: 13.5px;
       font-weight: 600;
       cursor: pointer;
+      transition: border-color 0.2s, color 0.2s, background-color 0.2s;
     }
 
-    .btn-secondary:hover { border-color: #94a3b8; color: #fff; }
+    .btn-secondary:hover {
+      border-color: #38bdf8;
+      color: #fff;
+      background: rgba(30, 41, 59, 0.75);
+    }
 
     .otp-grid {
       display: grid;
@@ -193,13 +319,13 @@
       padding: 12px 0;
     }
 
-    .sim-sms-banner {
-      background: rgba(56, 189, 248, 0.14);
-      border: 1px dashed rgba(56, 189, 248, 0.55);
+    .otp-banner {
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px dashed rgba(56, 189, 248, 0.5);
       color: #bae6fd;
       font-size: 13px;
       padding: 10px 12px;
-      border-radius: 10px;
+      border-radius: 11px;
       margin-bottom: 14px;
       text-align: center;
     }
@@ -207,97 +333,45 @@
     .msg-box {
       display: none;
       font-size: 13px;
+      font-weight: 500;
       padding: 10px 12px;
-      border-radius: 9px;
+      border-radius: 10px;
       margin-bottom: 15px;
       text-align: center;
+      animation: cardEnter 0.25s ease both;
     }
 
     .msg-error {
-      background: rgba(239, 68, 68, 0.16);
+      background: rgba(239, 68, 68, 0.14);
       border: 1px solid rgba(239, 68, 68, 0.45);
       color: #fca5a5;
     }
 
     .msg-success {
-      background: rgba(16, 185, 129, 0.16);
-      border: 1px solid rgba(16, 185, 129, 0.45);
+      background: rgba(16, 185, 129, 0.14);
+      border: 1px solid rgba(16, 185, 129, 0.48);
       color: #6ee7b7;
     }
 
     .hidden-form { display: none; }
 
-    /* UAT Drawer */
-    .uat-footer {
-      margin-top: 18px;
+    .portal-footer {
+      margin-top: 20px;
       padding-top: 14px;
-      border-top: 1px solid rgba(148, 163, 184, 0.15);
+      border-top: 1px solid rgba(148, 163, 184, 0.14);
       display: flex;
       justify-content: space-between;
       align-items: center;
       font-size: 12px;
       color: #64748b;
     }
-
-    .uat-toggle-link {
-      background: none;
-      border: none;
-      color: #38bdf8;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: underline;
-    }
-
-    .uat-panel {
-      display: none;
-      margin-top: 12px;
-      padding: 12px;
-      background: rgba(15, 23, 42, 0.85);
-      border: 1px solid #334155;
-      border-radius: 10px;
-      font-size: 12px;
-      color: #cbd5e1;
-    }
-
-    .uat-panel.open { display: block; }
-
-    .uat-list {
-      margin: 8px 0;
-      max-height: 110px;
-      overflow-y: auto;
-      font-family: monospace;
-      font-size: 11.5px;
-      color: #94a3b8;
-    }
-
-    .uat-actions {
-      display: flex;
-      gap: 8px;
-      margin-top: 8px;
-    }
-
-    .uat-mini-btn {
-      flex: 1;
-      padding: 6px 8px;
-      border-radius: 6px;
-      border: 1px solid #475569;
-      background: #1e293b;
-      color: #e2e8f0;
-      font-size: 11px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .uat-mini-btn.danger {
-      border-color: rgba(239, 68, 68, 0.5);
-      color: #fca5a5;
-    }
   </style>
 </head>
 <body>
+  <div class="aurora-bg"></div>
+  <div class="grid-overlay"></div>
 
-  <div class="auth-card">
+  <div class="auth-card" id="authCard">
     <div class="brand-row">
       <div class="brand-left">
         <div class="brand-badge">JT</div>
@@ -306,7 +380,7 @@
           <div class="brand-sub">Workspace Portal</div>
         </div>
       </div>
-      <span class="uat-pill">UAT MODE</span>
+      <span class="status-pill"><span class="status-dot"></span> SECURE ACCESS</span>
     </div>
 
     <div class="mode-tabs">
@@ -324,7 +398,7 @@
       <form id="loginForm">
         <div class="form-group">
           <label for="loginId">Username or Mobile Number</label>
-          <input type="text" id="loginId" placeholder="admin or 10-digit mobile" required autocomplete="username" />
+          <input type="text" id="loginId" placeholder="Enter username or 10-digit mobile" required autocomplete="username" />
         </div>
 
         <div class="form-group">
@@ -347,7 +421,7 @@
       <form id="signupDetailsForm">
         <div class="form-group">
           <label for="signupUser">Full Name / Username</label>
-          <input type="text" id="signupUser" placeholder="e.g. Asik" required />
+          <input type="text" id="signupUser" placeholder="Enter your name or username" required />
         </div>
 
         <div class="form-group">
@@ -380,8 +454,8 @@
       <h1>Verify Mobile Number</h1>
       <p class="subtitle">Enter the 6-digit OTP sent to <strong id="displayPhone" style="color:#f8fafc;"></strong></p>
 
-      <div class="sim-sms-banner">
-        📱 UAT Test OTP: <strong id="generatedOtpText" style="font-size:16px;letter-spacing:2px;"></strong>
+      <div class="otp-banner">
+        📱 Verification OTP: <strong id="generatedOtpText" style="font-size:16px;letter-spacing:2px;"></strong>
       </div>
 
       <form id="otpVerifyForm">
@@ -400,24 +474,15 @@
       </form>
     </div>
 
-    <!-- UAT FOOTER & TESTER DRAWER -->
-    <div class="uat-footer">
-      <span>Zero-Cost Local UAT Build</span>
-      <button type="button" class="uat-toggle-link" id="toggleUatBtn">UAT Test Tools</button>
-    </div>
-
-    <div class="uat-panel" id="uatPanel">
-      <strong>Stored UAT Accounts (Browser Local):</strong>
-      <div class="uat-list" id="uatAccountList"></div>
-      <div class="uat-actions">
-        <button type="button" class="uat-mini-btn" id="quickAdminBtn">Fill Demo Admin</button>
-        <button type="button" class="uat-mini-btn danger" id="clearUatBtn">Reset UAT Users</button>
-      </div>
+    <div class="portal-footer">
+      <span>JunctionTeam Workspace</span>
+      <span>Encrypted Session</span>
     </div>
   </div>
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
+      const authCard = document.getElementById("authCard");
       const tabLogin = document.getElementById("tabLogin");
       const tabSignup = document.getElementById("tabSignup");
       const loginSection = document.getElementById("loginSection");
@@ -425,10 +490,7 @@
       const signupStep2 = document.getElementById("signupStep2");
       const msgBox = document.getElementById("msgBox");
 
-      if (!tabLogin || !loginSection) {
-        console.error("JunctionTeam: Expected auth DOM elements are missing from index.html.");
-        return;
-      }
+      if (!tabLogin || !loginSection) return;
 
       let pendingSignup = null;
       let activeOtp = "";
@@ -445,41 +507,15 @@
         msgBox.style.display = "none";
       }
 
+      function triggerSuccessGlow() {
+        if (authCard) authCard.classList.add("auth-granted");
+      }
+
       function getStoredAccounts() {
         const defaults = [{ username: "admin", phone: "0000000000", password: "1234", verified: true }];
         const saved = JSON.parse(localStorage.getItem("jt_accounts") || "[]");
         return [...defaults, ...saved];
       }
-
-      function renderUatList() {
-        const listEl = document.getElementById("uatAccountList");
-        if (!listEl) return;
-        const accounts = getStoredAccounts();
-        listEl.innerHTML = accounts
-          .map((a) => `• ${a.username} | ${a.phone} | pass: ${a.password}`)
-          .join("<br>");
-      }
-
-      // UAT Drawer Controls
-      document.getElementById("toggleUatBtn")?.addEventListener("click", () => {
-        renderUatList();
-        document.getElementById("uatPanel")?.classList.toggle("open");
-      });
-
-      document.getElementById("quickAdminBtn")?.addEventListener("click", () => {
-        tabLogin.click();
-        const loginIdEl = document.getElementById("loginId");
-        const loginPassEl = document.getElementById("loginPass");
-        if (loginIdEl) loginIdEl.value = "admin";
-        if (loginPassEl) loginPassEl.value = "1234";
-        showMessage("Filled default UAT admin credentials.", "success");
-      });
-
-      document.getElementById("clearUatBtn")?.addEventListener("click", () => {
-        localStorage.removeItem("jt_accounts");
-        renderUatList();
-        showMessage("All custom UAT test accounts cleared.", "success");
-      });
 
       // Tab Switching
       tabLogin.addEventListener("click", () => {
@@ -557,7 +593,7 @@
           (a) => a.username.toLowerCase() === username.toLowerCase() || a.phone === phone
         );
         if (existing) {
-          showMessage("Username or mobile number already registered in UAT.", "error");
+          showMessage("Username or mobile number is already registered.", "error");
           return;
         }
 
@@ -583,7 +619,7 @@
         const enteredOtp = Array.from(otpInputs).map((i) => i.value).join("");
 
         if (enteredOtp !== activeOtp) {
-          showMessage("Invalid OTP. Check the UAT Test OTP banner above.", "error");
+          showMessage("Invalid OTP. Please check the verification code and try again.", "error");
           return;
         }
 
@@ -600,7 +636,8 @@
           })
         );
 
-        showMessage("Account verified! Redirecting to dashboard...", "success");
+        triggerSuccessGlow();
+        showMessage("Account verified! Redirecting to workspace...", "success");
         setTimeout(() => {
           window.location.href = "dashboard.html";
         }, 600);
@@ -608,7 +645,7 @@
 
       document.getElementById("resendOtpBtn")?.addEventListener("click", () => {
         issueOtp();
-        showMessage("New UAT OTP generated.", "success");
+        showMessage("A new verification OTP has been sent.", "success");
       });
 
       document.getElementById("editPhoneBtn")?.addEventListener("click", () => {
@@ -633,7 +670,7 @@
         );
 
         if (!matched) {
-          showMessage("Invalid credentials. Try admin / 1234 or sign up.", "error");
+          showMessage("Invalid username, mobile number, or password.", "error");
           return;
         }
 
@@ -646,10 +683,11 @@
           })
         );
 
+        triggerSuccessGlow();
         showMessage("Login successful! Redirecting...", "success");
         setTimeout(() => {
           window.location.href = "dashboard.html";
-        }, 400);
+        }, 450);
       });
     });
   </script>
