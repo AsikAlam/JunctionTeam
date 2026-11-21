@@ -5,6 +5,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>JunctionTeam — Workspace Portal</title>
   <style>
+    @property --border-angle {
+      syntax: "<angle>";
+      inherits: false;
+      initial-value: 0deg;
+    }
+
+    :root {
+      --accent-1: #38bdf8;
+      --accent-2: #6366f1;
+      --accent-3: #ec4899;
+      --glow-rgb: 56, 189, 248;
+      --glow-2-rgb: 99, 102, 241;
+    }
+
+    body[data-theme="emerald"] {
+      --accent-1: #34d399;
+      --accent-2: #059669;
+      --accent-3: #22d3ee;
+      --glow-rgb: 52, 211, 153;
+      --glow-2-rgb: 16, 185, 129;
+    }
+
+    body[data-theme="solar"] {
+      --accent-1: #fbbf24;
+      --accent-2: #f97316;
+      --accent-3: #f43f5e;
+      --glow-rgb: 251, 191, 36;
+      --glow-2-rgb: 249, 115, 22;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -15,86 +45,259 @@
     body {
       min-height: 100vh;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      background: #070b14;
+      background: #03060f;
       color: #f8fafc;
-      padding: 20px;
+      padding: 24px;
       position: relative;
       overflow-x: hidden;
+      perspective: 1200px;
     }
 
-    /* Animated Aurora Backdrop */
-    .aurora-bg {
+    /* Hardware-Accelerated WebGL Fluid Shader Canvas */
+    #shaderCanvas {
       position: fixed;
       inset: 0;
-      z-index: 0;
-      pointer-events: none;
-      background:
-        radial-gradient(circle at 18% 22%, rgba(59, 130, 246, 0.24), transparent 42%),
-        radial-gradient(circle at 82% 28%, rgba(139, 92, 246, 0.22), transparent 45%),
-        radial-gradient(circle at 52% 85%, rgba(6, 182, 212, 0.18), transparent 48%);
-      animation: auroraDrift 14s ease-in-out infinite alternate;
-    }
-
-    .grid-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-      background-image:
-        linear-gradient(rgba(148, 163, 184, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(148, 163, 184, 0.05) 1px, transparent 1px);
-      background-size: 36px 36px;
-      mask-image: radial-gradient(ellipse at center, black 35%, transparent 82%);
-    }
-
-    @keyframes auroraDrift {
-      0% { transform: scale(1) translate(0, 0); }
-      100% { transform: scale(1.08) translate(16px, -14px); }
-    }
-
-    @keyframes cardEnter {
-      from {
-        opacity: 0;
-        transform: translateY(18px) scale(0.985);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-    }
-
-    /* Glass Card with Subtle Gradient Rim */
-    .auth-card {
-      position: relative;
-      z-index: 1;
       width: 100%;
-      max-width: 440px;
-      background: rgba(15, 23, 42, 0.82);
-      backdrop-filter: blur(18px);
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Subtle Architectural Micro-Grain & Vignette */
+    .vignette-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background: radial-gradient(circle at center, transparent 35%, rgba(2, 5, 14, 0.72) 100%);
+    }
+
+    /* Split Stage */
+    .portal-stage {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 1000px;
+      display: grid;
+      grid-template-columns: 1.04fr 0.96fr;
+      gap: 38px;
+      align-items: center;
+    }
+
+    @media (max-width: 880px) {
+      .portal-stage {
+        grid-template-columns: 1fr;
+        max-width: 450px;
+      }
+      .visual-showcase {
+        display: none;
+      }
+    }
+
+    @keyframes stageEnter {
+      from { opacity: 0; transform: translateY(22px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* LEFT: Animated Biometric & Holographic Circuit Showcase */
+    .visual-showcase {
+      position: relative;
+      padding: 20px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      animation: stageEnter 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+      transition: transform 0.2s ease-out;
+    }
+
+    .holo-stage {
+      position: relative;
+      width: 224px;
+      height: 224px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .holo-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1.5px solid rgba(var(--glow-rgb), 0.45);
+      box-shadow: 0 0 24px rgba(var(--glow-rgb), 0.22), inset 0 0 18px rgba(var(--glow-2-rgb), 0.2);
+      transition: border-color 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .ring-outer {
+      width: 216px;
+      height: 216px;
+      border-style: dashed;
+      animation: spinCW 20s linear infinite;
+    }
+
+    .ring-mid {
+      width: 168px;
+      height: 168px;
+      border-color: rgba(var(--glow-2-rgb), 0.55);
+      border-top-color: var(--accent-1);
+      border-bottom-color: var(--accent-3);
+      animation: spinCCW 12s linear infinite;
+    }
+
+    .ring-inner {
+      width: 122px;
+      height: 122px;
+      border-color: rgba(var(--glow-rgb), 0.5);
+      animation: spinCW 7.5s linear infinite;
+    }
+
+    @keyframes spinCW { to { transform: rotate(360deg); } }
+    @keyframes spinCCW { to { transform: rotate(-360deg); } }
+
+    .circuit-core {
+      position: relative;
+      width: 78px;
+      height: 78px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow:
+        0 0 42px rgba(var(--glow-rgb), 0.55),
+        0 0 75px rgba(var(--glow-2-rgb), 0.35);
+      animation: coreLevitate 4.2s ease-in-out infinite alternate;
+      transition: background 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    @keyframes coreLevitate {
+      0% { transform: translateY(-4px) scale(1); }
+      100% { transform: translateY(5px) scale(1.05); }
+    }
+
+    .circuit-path {
+      stroke-dasharray: 120;
+      stroke-dashoffset: 120;
+      animation: traceCircuit 2.2s ease forwards;
+    }
+
+    @keyframes traceCircuit {
+      to { stroke-dashoffset: 0; }
+    }
+
+    .showcase-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.1px;
+      text-transform: uppercase;
+      color: var(--accent-1);
+      background: rgba(var(--glow-rgb), 0.12);
+      border: 1px solid rgba(var(--glow-rgb), 0.35);
+      padding: 5px 12px;
+      border-radius: 999px;
+      margin-bottom: 14px;
+      transition: all 0.35s ease;
+    }
+
+    .showcase-title {
+      font-size: 37px;
+      font-weight: 800;
+      line-height: 1.14;
+      letter-spacing: -0.75px;
+      margin-bottom: 13px;
+      background: linear-gradient(100deg, #ffffff 0%, var(--accent-1) 58%, #e2e8f0 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .showcase-desc {
+      font-size: 14.5px;
+      line-height: 1.62;
+      color: #94a3b8;
+      max-width: 420px;
+      margin-bottom: 22px;
+    }
+
+    .telemetry-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .telemetry-chip {
+      background: rgba(10, 16, 32, 0.72);
       border: 1px solid rgba(148, 163, 184, 0.2);
-      border-radius: 22px;
+      backdrop-filter: blur(12px);
+      padding: 8px 13px;
+      border-radius: 11px;
+      font-size: 12px;
+      color: #cbd5e1;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .chip-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 8px #10b981;
+    }
+
+    /* RIGHT: Etched Glass Auth Card with Conic Rotating Rim */
+    @keyframes spinBorder {
+      to { --border-angle: 360deg; }
+    }
+
+    .auth-card {
+      --mx: 50%;
+      --my: 50%;
+      --border-angle: 0deg;
+      position: relative;
+      width: 100%;
+      background: rgba(9, 14, 28, 0.78);
+      backdrop-filter: blur(28px) saturate(165%);
+      -webkit-backdrop-filter: blur(28px) saturate(165%);
+      border-radius: 25px;
       padding: 32px 28px;
       box-shadow:
-        0 28px 60px -15px rgba(0, 0, 0, 0.7),
-        0 0 0 1px rgba(56, 189, 248, 0.08) inset;
-      animation: cardEnter 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
-      transition: box-shadow 0.35s ease, border-color 0.35s ease;
+        0 34px 80px -16px rgba(0, 0, 0, 0.88),
+        0 0 0 1px rgba(255, 255, 255, 0.07) inset;
+      animation: stageEnter 0.65s cubic-bezier(0.22, 1, 0.36, 1) both, spinBorder 6.5s linear infinite;
+      transform-style: preserve-3d;
+      transition: transform 0.16s ease-out, box-shadow 0.4s ease;
     }
 
+    /* Etched Glass Micro-Grain Texture */
+    .glass-grain {
+      position: absolute;
+      inset: 0;
+      border-radius: 25px;
+      opacity: 0.035;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* Conic Laser Border */
     .auth-card::before {
       content: "";
       position: absolute;
-      inset: -1px;
-      border-radius: 22px;
-      padding: 1px;
-      background: linear-gradient(
-        135deg,
-        rgba(56, 189, 248, 0.45),
-        rgba(139, 92, 246, 0.2),
-        rgba(236, 72, 153, 0.35)
+      inset: -1.5px;
+      border-radius: 26px;
+      padding: 1.5px;
+      background: conic-gradient(
+        from var(--border-angle),
+        var(--accent-1),
+        rgba(148, 163, 184, 0.15),
+        var(--accent-3),
+        rgba(148, 163, 184, 0.15),
+        var(--accent-1)
       );
       -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
       -webkit-mask-composite: xor;
@@ -102,104 +305,135 @@
       pointer-events: none;
     }
 
+    /* Cursor Spotlight Refraction */
+    .auth-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 25px;
+      background: radial-gradient(
+        340px circle at var(--mx) var(--my),
+        rgba(var(--glow-rgb), 0.15),
+        transparent 65%
+      );
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .auth-card:hover::after {
+      opacity: 1;
+    }
+
     .auth-card.auth-granted {
-      border-color: rgba(16, 185, 129, 0.7);
       box-shadow:
-        0 28px 60px -15px rgba(0, 0, 0, 0.75),
-        0 0 36px rgba(16, 185, 129, 0.28);
+        0 34px 80px -15px rgba(0, 0, 0, 0.88),
+        0 0 55px rgba(16, 185, 129, 0.48);
     }
 
     .brand-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 10px;
       margin-bottom: 20px;
     }
 
     .brand-left { display: flex; align-items: center; gap: 12px; }
 
     .brand-badge {
-      width: 46px;
-      height: 46px;
-      background: linear-gradient(135deg, #38bdf8, #3b82f6 50%, #8b5cf6);
-      border-radius: 14px;
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+      border-radius: 13px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      box-shadow: 0 10px 24px rgba(59, 130, 246, 0.38);
-      transition: transform 0.3s ease;
+      color: #ffffff;
+      box-shadow: 0 10px 22px rgba(var(--glow-rgb), 0.38);
+      transition: background 0.35s ease, box-shadow 0.35s ease;
     }
 
-    .brand-badge:hover {
-      transform: translateY(-2px) rotate(-3deg);
-    }
-
-    .brand-title { font-size: 18.5px; font-weight: 800; color: #f8fafc; letter-spacing: -0.2px; }
+    .brand-title { font-size: 18.5px; font-weight: 800; color: #f8fafc; letter-spacing: -0.25px; }
     .brand-sub { font-size: 12px; color: #94a3b8; }
 
-    .status-pill {
-      display: inline-flex;
+    /* Atmosphere Theme Switcher Pills */
+    .theme-switcher {
+      display: flex;
       align-items: center;
       gap: 6px;
-      background: rgba(16, 185, 129, 0.14);
-      border: 1px solid rgba(16, 185, 129, 0.4);
-      color: #6ee7b7;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.4px;
-      padding: 5px 11px;
+      background: rgba(4, 8, 18, 0.78);
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      padding: 5px 8px;
       border-radius: 999px;
     }
 
-    .status-dot {
-      width: 6px;
-      height: 6px;
+    .theme-dot {
+      width: 14px;
+      height: 14px;
       border-radius: 50%;
-      background: #10b981;
-      box-shadow: 0 0 8px #10b981;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: transform 0.2s ease, border-color 0.2s ease;
     }
 
+    .theme-dot:hover { transform: scale(1.18); }
+    .theme-dot.active { border-color: #ffffff; transform: scale(1.15); }
+    .dot-aurora { background: linear-gradient(135deg, #38bdf8, #6366f1); }
+    .dot-emerald { background: linear-gradient(135deg, #34d399, #059669); }
+    .dot-solar { background: linear-gradient(135deg, #fbbf24, #f97316); }
+
+    /* Gliding Pill Tabs */
     .mode-tabs {
+      position: relative;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      background: rgba(9, 13, 22, 0.75);
+      background: rgba(4, 8, 18, 0.85);
       padding: 4px;
       border-radius: 13px;
       border: 1px solid rgba(148, 163, 184, 0.16);
-      margin-bottom: 22px;
+      margin-bottom: 20px;
+    }
+
+    .tab-glider {
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      width: calc(50% - 4px);
+      height: calc(100% - 8px);
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+      box-shadow: 0 6px 18px rgba(var(--glow-rgb), 0.36);
+      transition: transform 0.32s cubic-bezier(0.34, 1.4, 0.64, 1), background 0.35s ease;
+      pointer-events: none;
+    }
+
+    .mode-tabs.signup-active .tab-glider {
+      transform: translateX(100%);
     }
 
     .tab-btn {
+      position: relative;
+      z-index: 1;
       padding: 9px;
       border: none;
       border-radius: 10px;
       background: transparent;
       color: #94a3b8;
       font-size: 14px;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
-      transition: all 0.22s ease;
+      transition: color 0.25s ease;
     }
 
-    .tab-btn:hover { color: #e2e8f0; }
-
-    .tab-btn.active {
-      background: linear-gradient(135deg, #3b82f6, #6366f1);
-      color: #ffffff;
-      box-shadow: 0 6px 16px rgba(59, 130, 246, 0.35);
-    }
+    .tab-btn.active { color: #ffffff; }
 
     h1 {
       font-size: 23px;
       font-weight: 800;
       letter-spacing: -0.3px;
       margin-bottom: 5px;
-      background: linear-gradient(90deg, #ffffff, #cbd5e1);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: #f8fafc;
     }
 
     p.subtitle { font-size: 13.5px; color: #94a3b8; margin-bottom: 18px; line-height: 1.45; }
@@ -222,7 +456,7 @@
 
     select, input {
       padding: 11.5px 14px;
-      background: rgba(9, 13, 22, 0.78);
+      background: rgba(4, 8, 18, 0.86);
       border: 1px solid rgba(148, 163, 184, 0.22);
       border-radius: 11px;
       color: #f8fafc;
@@ -232,13 +466,13 @@
     }
 
     input { width: 100%; }
-    input[type="password"] { padding-right: 62px; }
+    input[type="password"] { padding-right: 64px; }
     select { width: 94px; flex-shrink: 0; cursor: pointer; }
 
     input:focus, select:focus {
-      background: rgba(15, 23, 42, 0.95);
-      border-color: #38bdf8;
-      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+      background: rgba(10, 16, 32, 0.98);
+      border-color: var(--accent-1);
+      box-shadow: 0 0 0 3.5px rgba(var(--glow-rgb), 0.22);
     }
 
     .toggle-btn {
@@ -246,10 +480,10 @@
       right: 12px;
       top: 50%;
       transform: translateY(-50%);
-      background: rgba(30, 41, 59, 0.8);
-      border: 1px solid rgba(148, 163, 184, 0.2);
-      border-radius: 6px;
-      padding: 3px 7px;
+      background: rgba(30, 41, 59, 0.85);
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      border-radius: 7px;
+      padding: 3.5px 8px;
       color: #94a3b8;
       font-size: 10.5px;
       cursor: pointer;
@@ -257,30 +491,73 @@
       transition: color 0.2s, border-color 0.2s;
     }
 
-    .toggle-btn:hover { color: #f8fafc; border-color: #38bdf8; }
+    .toggle-btn:hover { color: #f8fafc; border-color: var(--accent-1); }
 
+    /* Live Password Entropy Bar */
+    .strength-track {
+      height: 4px;
+      width: 100%;
+      background: rgba(30, 41, 59, 0.85);
+      border-radius: 999px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+
+    .strength-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: #ef4444;
+      transition: width 0.28s ease, background-color 0.28s ease;
+    }
+
+    .strength-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #64748b;
+      margin-top: 4px;
+    }
+
+    /* Shimmer Submit Button */
     .btn-submit {
       position: relative;
       overflow: hidden;
       width: 100%;
-      padding: 12.5px;
+      padding: 13px;
       margin-top: 6px;
-      background: linear-gradient(135deg, #38bdf8 0%, #3b82f6 50%, #7c3aed 100%);
-      background-size: 200% 200%;
+      background: linear-gradient(135deg, var(--accent-1) 0%, var(--accent-2) 100%);
       color: #ffffff;
       border: none;
-      border-radius: 11px;
+      border-radius: 12px;
       font-size: 15px;
       font-weight: 700;
+      letter-spacing: 0.2px;
       cursor: pointer;
-      box-shadow: 0 10px 24px rgba(59, 130, 246, 0.35);
-      transition: transform 0.2s ease, box-shadow 0.2s ease, background-position 0.4s ease;
+      box-shadow: 0 12px 26px rgba(var(--glow-rgb), 0.36);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.35s ease;
+    }
+
+    .btn-submit::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -120%;
+      width: 65%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.32), transparent);
+      transform: skewX(-22deg);
+      animation: btnSweep 3.8s infinite ease-in-out;
+    }
+
+    @keyframes btnSweep {
+      0%, 58% { left: -120%; }
+      100% { left: 160%; }
     }
 
     .btn-submit:hover {
-      transform: translateY(-1.5px);
-      background-position: 100% 0;
-      box-shadow: 0 14px 28px rgba(99, 102, 241, 0.42);
+      transform: translateY(-2px);
+      box-shadow: 0 16px 32px rgba(var(--glow-rgb), 0.48);
     }
 
     .btn-submit:active { transform: translateY(0) scale(0.99); }
@@ -289,10 +566,10 @@
       width: 100%;
       padding: 10px;
       margin-top: 8px;
-      background: rgba(15, 23, 42, 0.5);
+      background: rgba(15, 23, 42, 0.55);
       border: 1px solid rgba(148, 163, 184, 0.25);
       color: #cbd5e1;
-      border-radius: 10px;
+      border-radius: 11px;
       font-size: 13.5px;
       font-weight: 600;
       cursor: pointer;
@@ -300,9 +577,9 @@
     }
 
     .btn-secondary:hover {
-      border-color: #38bdf8;
+      border-color: var(--accent-1);
       color: #fff;
-      background: rgba(30, 41, 59, 0.75);
+      background: rgba(30, 41, 59, 0.8);
     }
 
     .otp-grid {
@@ -320,9 +597,9 @@
     }
 
     .otp-banner {
-      background: rgba(56, 189, 248, 0.12);
-      border: 1px dashed rgba(56, 189, 248, 0.5);
-      color: #bae6fd;
+      background: rgba(var(--glow-rgb), 0.12);
+      border: 1px dashed rgba(var(--glow-rgb), 0.5);
+      color: #e0f2fe;
       font-size: 13px;
       padding: 10px 12px;
       border-radius: 11px;
@@ -338,7 +615,6 @@
       border-radius: 10px;
       margin-bottom: 15px;
       text-align: center;
-      animation: cardEnter 0.25s ease both;
     }
 
     .msg-error {
@@ -356,133 +632,180 @@
     .hidden-form { display: none; }
 
     .portal-footer {
-      margin-top: 20px;
-      padding-top: 14px;
+      margin-top: 18px;
+      padding-top: 13px;
       border-top: 1px solid rgba(148, 163, 184, 0.14);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 12px;
+      font-size: 11.5px;
       color: #64748b;
     }
   </style>
 </head>
-<body>
-  <div class="aurora-bg"></div>
-  <div class="grid-overlay"></div>
+<body data-theme="aurora">
+  <canvas id="shaderCanvas"></canvas>
+  <div class="vignette-layer"></div>
 
-  <div class="auth-card" id="authCard">
-    <div class="brand-row">
-      <div class="brand-left">
-        <div class="brand-badge">JT</div>
-        <div>
-          <div class="brand-title">JunctionTeam</div>
-          <div class="brand-sub">Workspace Portal</div>
+  <div class="portal-stage">
+    <!-- Left Holographic Circuit Showcase -->
+    <section class="visual-showcase" id="visualShowcase" aria-hidden="true">
+      <div class="holo-stage">
+        <div class="holo-ring ring-outer"></div>
+        <div class="holo-ring ring-mid"></div>
+        <div class="holo-ring ring-inner"></div>
+        <div class="circuit-core">
+          <svg width="38" height="38" viewBox="0 0 24 24" fill="none">
+            <path class="circuit-path" d="M12 2L20 6.5V17.5L12 22L4 17.5V6.5L12 2Z" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+            <path class="circuit-path" d="M12 7V17M7.5 9.5L16.5 14.5M16.5 9.5L7.5 14.5" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
         </div>
       </div>
-      <span class="status-pill"><span class="status-dot"></span> SECURE ACCESS</span>
-    </div>
 
-    <div class="mode-tabs">
-      <button type="button" class="tab-btn active" id="tabLogin">Sign In</button>
-      <button type="button" class="tab-btn" id="tabSignup">Sign Up</button>
-    </div>
+      <span class="showcase-badge">NEXT-GEN WORKSPACE</span>
+      <h2 class="showcase-title">Unified Team Command Center</h2>
+      <p class="showcase-desc">
+        Connect seamlessly to your team hub, operations desk, product releases, and interactive workspace tools from one encrypted gateway.
+      </p>
 
-    <div id="msgBox" class="msg-box"></div>
+      <div class="telemetry-row">
+        <div class="telemetry-chip"><span class="chip-dot"></span> Gateway Online</div>
+        <div class="telemetry-chip" id="liveClockChip">🕒 --:--:--</div>
+        <div class="telemetry-chip">🛡️ OTP Verified</div>
+      </div>
+    </section>
 
-    <!-- SIGN IN FORM -->
-    <div id="loginSection">
-      <h1>Welcome Back</h1>
-      <p class="subtitle">Sign in using your username or verified mobile number</p>
+    <!-- Right Etched Glass Auth Card -->
+    <div class="auth-card" id="authCard">
+      <div class="glass-grain"></div>
 
-      <form id="loginForm">
-        <div class="form-group">
-          <label for="loginId">Username or Mobile Number</label>
-          <input type="text" id="loginId" placeholder="Enter username or 10-digit mobile" required autocomplete="username" />
-        </div>
-
-        <div class="form-group">
-          <label for="loginPass">Password</label>
-          <div class="input-wrapper">
-            <input type="password" id="loginPass" placeholder="Enter your password" required autocomplete="current-password" />
-            <button type="button" class="toggle-btn" data-target="loginPass">SHOW</button>
+      <div class="brand-row">
+        <div class="brand-left">
+          <div class="brand-badge" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <path d="M12 2L20 6.5V17.5L12 22L4 17.5V6.5L12 2Z" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M12 7V17M7.5 9.5L16.5 14.5" stroke="white" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div>
+            <div class="brand-title">JunctionTeam</div>
+            <div class="brand-sub">Workspace Portal</div>
           </div>
         </div>
 
-        <button type="submit" class="btn-submit">Sign In</button>
-      </form>
-    </div>
-
-    <!-- SIGN UP STEP 1 -->
-    <div id="signupStep1" class="hidden-form">
-      <h1>Create Account</h1>
-      <p class="subtitle">Verify your mobile number via 6-digit OTP to register</p>
-
-      <form id="signupDetailsForm">
-        <div class="form-group">
-          <label for="signupUser">Full Name / Username</label>
-          <input type="text" id="signupUser" placeholder="Enter your name or username" required />
+        <div class="theme-switcher" title="Switch Visual Atmosphere">
+          <button type="button" class="theme-dot dot-aurora active" data-theme-pick="aurora" aria-label="Cyber Aurora Theme"></button>
+          <button type="button" class="theme-dot dot-emerald" data-theme-pick="emerald" aria-label="Emerald Matrix Theme"></button>
+          <button type="button" class="theme-dot dot-solar" data-theme-pick="solar" aria-label="Solar Gold Theme"></button>
         </div>
-
-        <div class="form-group">
-          <label for="signupPhone">Mobile Number</label>
-          <div class="phone-row">
-            <select id="countryCode" aria-label="Country Code">
-              <option value="+91" selected>+91</option>
-              <option value="+1">+1</option>
-              <option value="+44">+44</option>
-              <option value="+971">+971</option>
-            </select>
-            <input type="tel" id="signupPhone" placeholder="10-digit mobile number" pattern="[0-9]{10}" maxlength="10" required />
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="signupPass">Create Password</label>
-          <div class="input-wrapper">
-            <input type="password" id="signupPass" placeholder="Min. 4 characters" minlength="4" required />
-            <button type="button" class="toggle-btn" data-target="signupPass">SHOW</button>
-          </div>
-        </div>
-
-        <button type="submit" class="btn-submit">Send Verification OTP</button>
-      </form>
-    </div>
-
-    <!-- SIGN UP STEP 2: OTP -->
-    <div id="signupStep2" class="hidden-form">
-      <h1>Verify Mobile Number</h1>
-      <p class="subtitle">Enter the 6-digit OTP sent to <strong id="displayPhone" style="color:#f8fafc;"></strong></p>
-
-      <div class="otp-banner">
-        📱 Verification OTP: <strong id="generatedOtpText" style="font-size:16px;letter-spacing:2px;"></strong>
       </div>
 
-      <form id="otpVerifyForm">
-        <div class="otp-grid">
-          <input type="text" inputmode="numeric" maxlength="1" class="otp-digit" required />
-          <input type="text" inputmode="numeric" maxlength="1" class="otp-digit" required />
-          <input type="text" inputmode="numeric" maxlength="1" class="otp-digit" required />
-          <input type="text" inputmode="numeric" maxlength="1" class="otp-digit" required />
-          <input type="text" inputmode="numeric" maxlength="1" class="otp-digit" required />
-          <input type="text" inputmode="numeric" maxlength="1" class="otp-digit" required />
+      <div class="mode-tabs" id="modeTabs">
+        <div class="tab-glider"></div>
+        <button type="button" class="tab-btn active" id="tabLogin">Sign In</button>
+        <button type="button" class="tab-btn" id="tabSignup">Sign Up</button>
+      </div>
+
+      <div id="msgBox" class="msg-box"></div>
+
+      <!-- SIGN IN FORM -->
+      <div id="loginSection">
+        <h1>Welcome Back</h1>
+        <p class="subtitle">Sign in using your username or verified mobile number</p>
+
+        <form id="loginForm">
+          <div class="form-group">
+            <label for="loginId">Username or Mobile Number</label>
+            <input type="text" id="loginId" placeholder="Enter username or 10-digit mobile" required autocomplete="username" />
+          </div>
+
+          <div class="form-group">
+            <label for="loginPass">Password</label>
+            <div class="input-wrapper">
+              <input type="password" id="loginPass" placeholder="Enter your password" required autocomplete="current-password" />
+              <button type="button" class="toggle-btn" data-target="loginPass">SHOW</button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-submit">Sign In</button>
+        </form>
+      </div>
+
+      <!-- SIGN UP STEP 1 -->
+      <div id="signupStep1" class="hidden-form">
+        <h1>Create Account</h1>
+        <p class="subtitle">Verify your mobile number via 6-digit OTP to register</p>
+
+        <form id="signupDetailsForm">
+          <div class="form-group">
+            <label for="signupUser">Full Name / Username</label>
+            <input type="text" id="signupUser" placeholder="Enter your name or username" required />
+          </div>
+
+          <div class="form-group">
+            <label for="signupPhone">Mobile Number</label>
+            <div class="phone-row">
+              <select id="countryCode" aria-label="Country Code">
+                <option value="+91" selected>+91</option>
+                <option value="+1">+1</option>
+                <option value="+44">+44</option>
+                <option value="+971">+971</option>
+              </select>
+              <input type="tel" id="signupPhone" placeholder="10-digit mobile number" pattern="[0-9]{10}" maxlength="10" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="signupPass">Create Password</label>
+            <div class="input-wrapper">
+              <input type="password" id="signupPass" placeholder="Min. 4 characters" minlength="4" required />
+              <button type="button" class="toggle-btn" data-target="signupPass">SHOW</button>
+            </div>
+            <div class="strength-track"><div class="strength-fill" id="strengthFill"></div></div>
+            <div class="strength-label"><span>Password strength</span><span id="strengthText">—</span></div>
+          </div>
+
+          <button type="submit" class="btn-submit">Send Verification OTP</button>
+        </form>
+      </div>
+
+      <!-- SIGN UP STEP 2: OTP -->
+      <div id="signupStep2" class="hidden-form">
+        <h1>Verify Mobile Number</h1>
+        <p class="subtitle">Enter the 6-digit OTP sent to <strong id="displayPhone" style="color:#f8fafc;"></strong></p>
+
+        <div class="otp-banner">
+          📱 Verification OTP: <strong id="generatedOtpText" style="font-size:16px;letter-spacing:2px;"></strong>
         </div>
 
-        <button type="submit" class="btn-submit">Verify OTP &amp; Create Account</button>
-        <button type="button" class="btn-secondary" id="resendOtpBtn">Resend OTP</button>
-        <button type="button" class="btn-secondary" id="editPhoneBtn">Change Mobile Number</button>
-      </form>
-    </div>
+        <form id="otpVerifyForm">
+          <div class="otp-grid">
+            <input type="text" inputmode="numeric" maxlength="1" class="otp-digit" required />
+            <input type="text" inputmode="numeric" maxlength="1" class="otp-digit" required />
+            <input type="text" inputmode="numeric" maxlength="1" class="otp-digit" required />
+            <input type="text" inputmode="numeric" maxlength="1" class="otp-digit" required />
+            <input type="text" inputmode="numeric" maxlength="1" class="otp-digit" required />
+            <input type="text" inputmode="numeric" maxlength="1" class="otp-digit" required />
+          </div>
 
-    <div class="portal-footer">
-      <span>JunctionTeam Workspace</span>
-      <span>Encrypted Session</span>
+          <button type="submit" class="btn-submit">Verify OTP &amp; Create Account</button>
+          <button type="button" class="btn-secondary" id="resendOtpBtn">Resend OTP</button>
+          <button type="button" class="btn-secondary" id="editPhoneBtn">Change Mobile Number</button>
+        </form>
+      </div>
+
+      <div class="portal-footer">
+        <span>JunctionTeam Workspace</span>
+        <span>Encrypted Session</span>
+      </div>
     </div>
   </div>
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const authCard = document.getElementById("authCard");
+      const visualShowcase = document.getElementById("visualShowcase");
+      const modeTabs = document.getElementById("modeTabs");
       const tabLogin = document.getElementById("tabLogin");
       const tabSignup = document.getElementById("tabSignup");
       const loginSection = document.getElementById("loginSection");
@@ -492,6 +815,191 @@
 
       if (!tabLogin || !loginSection) return;
 
+      // 1. Live Clock
+      const clockChip = document.getElementById("liveClockChip");
+      function updateClock() {
+        if (!clockChip) return;
+        const now = new Date();
+        clockChip.textContent =
+          "🕒 " + now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+      }
+      updateClock();
+      setInterval(updateClock, 1000);
+
+      // 2. WebGL GLSL Fluid Plasma Shader (with automatic 2D fallback)
+      const shaderPalettes = {
+        aurora: { c1: [0.05, 0.36, 0.68], c2: [0.36, 0.16, 0.64], c3: [0.04, 0.55, 0.62] },
+        emerald: { c1: [0.04, 0.48, 0.34], c2: [0.06, 0.28, 0.45], c3: [0.12, 0.62, 0.48] },
+        solar: { c1: [0.64, 0.32, 0.06], c2: [0.58, 0.12, 0.28], c3: [0.72, 0.46, 0.08] }
+      };
+      let currentPalette = shaderPalettes.aurora;
+      let shaderSpeed = 1.0;
+
+      const canvas = document.getElementById("shaderCanvas");
+      const gl = canvas && (canvas.getContext("webgl") || canvas.getContext("experimental-webgl"));
+      let pointerNorm = { x: 0.5, y: 0.5 };
+
+      window.addEventListener("mousemove", (e) => {
+        pointerNorm.x = e.clientX / Math.max(1, window.innerWidth);
+        pointerNorm.y = 1.0 - e.clientY / Math.max(1, window.innerHeight);
+
+        if (visualShowcase) {
+          const px = (pointerNorm.x - 0.5) * -14;
+          const py = (0.5 - pointerNorm.y) * -14;
+          visualShowcase.style.transform = `translate3d(${px.toFixed(1)}px, ${py.toFixed(1)}px, 0)`;
+        }
+      });
+
+      if (gl) {
+        const vsSource = `
+          attribute vec2 a_pos;
+          void main() { gl_Position = vec4(a_pos, 0.0, 1.0); }
+        `;
+        const fsSource = `
+          precision mediump float;
+          uniform vec2 u_res;
+          uniform float u_time;
+          uniform vec2 u_mouse;
+          uniform vec3 u_c1;
+          uniform vec3 u_c2;
+          uniform vec3 u_c3;
+
+          void main() {
+            vec2 uv = gl_FragCoord.xy / u_res.xy;
+            vec2 p = (uv - 0.5) * vec2(u_res.x / max(u_res.y, 1.0), 1.0);
+            vec2 m = (u_mouse - 0.5) * 0.45;
+
+            float t = u_time * 0.35;
+            float w1 = sin(p.x * 3.1 + t + m.x * 3.0) * cos(p.y * 2.7 - t * 0.8 + m.y * 3.0);
+            float w2 = sin(length(p - m) * 5.2 - t * 1.4);
+            float w3 = cos((p.x + p.y) * 3.8 + t * 0.9);
+
+            float blend1 = smoothstep(-0.8, 0.9, w1 + w2 * 0.45);
+            float blend2 = smoothstep(-0.7, 0.85, w3 - w1 * 0.4);
+
+            vec3 base = vec3(0.015, 0.025, 0.065);
+            vec3 col = mix(base, u_c1, blend1 * 0.52);
+            col = mix(col, u_c2, blend2 * 0.48);
+            col += u_c3 * pow(max(0.0, w2), 3.0) * 0.28;
+
+            gl_FragColor = vec4(col, 1.0);
+          }
+        `;
+
+        function compileShader(type, src) {
+          const s = gl.createShader(type);
+          gl.shaderSource(s, src);
+          gl.compileShader(s);
+          return s;
+        }
+
+        const prog = gl.createProgram();
+        gl.attachShader(prog, compileShader(gl.VERTEX_SHADER, vsSource));
+        gl.attachShader(prog, compileShader(gl.FRAGMENT_SHADER, fsSource));
+        gl.linkProgram(prog);
+        gl.useProgram(prog);
+
+        const buf = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+
+        const posLoc = gl.getAttribLocation(prog, "a_pos");
+        gl.enableVertexAttribArray(posLoc);
+        gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
+
+        const uRes = gl.getUniformLocation(prog, "u_res");
+        const uTime = gl.getUniformLocation(prog, "u_time");
+        const uMouse = gl.getUniformLocation(prog, "u_mouse");
+        const uC1 = gl.getUniformLocation(prog, "u_c1");
+        const uC2 = gl.getUniformLocation(prog, "u_c2");
+        const uC3 = gl.getUniformLocation(prog, "u_c3");
+
+        function resizeGL() {
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+          gl.viewport(0, 0, canvas.width, canvas.height);
+        }
+        window.addEventListener("resize", resizeGL);
+        resizeGL();
+
+        let simTime = 0;
+        let lastFrame = performance.now();
+        function renderGL(now) {
+          const dt = (now - lastFrame) * 0.001;
+          lastFrame = now;
+          simTime += dt * shaderSpeed;
+
+          gl.uniform2f(uRes, canvas.width, canvas.height);
+          gl.uniform1f(uTime, simTime);
+          gl.uniform2f(uMouse, pointerNorm.x, pointerNorm.y);
+          gl.uniform3fv(uC1, currentPalette.c1);
+          gl.uniform3fv(uC2, currentPalette.c2);
+          gl.uniform3fv(uC3, currentPalette.c3);
+
+          gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+          requestAnimationFrame(renderGL);
+        }
+        requestAnimationFrame(renderGL);
+      }
+
+      // 3. Theme Atmosphere Switcher
+      document.querySelectorAll("[data-theme-pick]").forEach((dot) => {
+        dot.addEventListener("click", () => {
+          const chosen = dot.dataset.themePick;
+          document.body.dataset.theme = chosen;
+          if (shaderPalettes[chosen]) currentPalette = shaderPalettes[chosen];
+          document.querySelectorAll(".theme-dot").forEach((d) => d.classList.remove("active"));
+          dot.classList.add("active");
+        });
+      });
+
+      // 4. 3D Card Tilt & Spotlight Reflection
+      if (authCard) {
+        authCard.addEventListener("mousemove", (e) => {
+          const rect = authCard.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          authCard.style.setProperty("--mx", `${x}px`);
+          authCard.style.setProperty("--my", `${y}px`);
+
+          const rotateY = ((x / rect.width) - 0.5) * 6;
+          const rotateX = ((y / rect.height) - 0.5) * -6;
+          authCard.style.transform = `rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg)`;
+        });
+
+        authCard.addEventListener("mouseleave", () => {
+          authCard.style.transform = "rotateX(0deg) rotateY(0deg)";
+        });
+      }
+
+      // 5. Password Strength Meter (Sign Up)
+      const signupPassInput = document.getElementById("signupPass");
+      const strengthFill = document.getElementById("strengthFill");
+      const strengthText = document.getElementById("strengthText");
+      signupPassInput?.addEventListener("input", () => {
+        const val = signupPassInput.value;
+        let score = 0;
+        if (val.length >= 4) score++;
+        if (val.length >= 8) score++;
+        if (/[A-Z]/.test(val) && /[0-9]/.test(val)) score++;
+        if (/[^A-Za-z0-9]/.test(val)) score++;
+
+        const levels = [
+          { w: "0%", color: "#ef4444", label: "—" },
+          { w: "28%", color: "#ef4444", label: "Weak" },
+          { w: "55%", color: "#f59e0b", label: "Fair" },
+          { w: "80%", color: "#38bdf8", label: "Strong" },
+          { w: "100%", color: "#10b981", label: "Fortified" }
+        ];
+        const lv = val.length === 0 ? levels[0] : levels[Math.max(1, score)];
+        if (strengthFill) {
+          strengthFill.style.width = lv.w;
+          strengthFill.style.backgroundColor = lv.color;
+        }
+        if (strengthText) strengthText.textContent = lv.label;
+      });
+
+      // 6. Auth & OTP Logic
       let pendingSignup = null;
       let activeOtp = "";
 
@@ -507,7 +1015,8 @@
         msgBox.style.display = "none";
       }
 
-      function triggerSuccessGlow() {
+      function triggerSuccessLaunch() {
+        shaderSpeed = 7.5;
         if (authCard) authCard.classList.add("auth-granted");
       }
 
@@ -517,10 +1026,10 @@
         return [...defaults, ...saved];
       }
 
-      // Tab Switching
       tabLogin.addEventListener("click", () => {
         tabLogin.classList.add("active");
         tabSignup?.classList.remove("active");
+        modeTabs?.classList.remove("signup-active");
         loginSection.classList.remove("hidden-form");
         signupStep1?.classList.add("hidden-form");
         signupStep2?.classList.add("hidden-form");
@@ -530,13 +1039,13 @@
       tabSignup?.addEventListener("click", () => {
         tabSignup.classList.add("active");
         tabLogin.classList.remove("active");
+        modeTabs?.classList.add("signup-active");
         signupStep1?.classList.remove("hidden-form");
         signupStep2?.classList.add("hidden-form");
         loginSection.classList.add("hidden-form");
         hideMessage();
       });
 
-      // Show / Hide Password
       document.querySelectorAll(".toggle-btn").forEach((btn) => {
         btn.addEventListener("click", () => {
           const input = document.getElementById(btn.dataset.target);
@@ -547,7 +1056,6 @@
         });
       });
 
-      // OTP Logic
       function issueOtp() {
         activeOtp = Math.floor(100000 + Math.random() * 900000).toString();
         const otpTextEl = document.getElementById("generatedOtpText");
@@ -579,7 +1087,6 @@
         });
       });
 
-      // Sign Up Step 1
       document.getElementById("signupDetailsForm")?.addEventListener("submit", (e) => {
         e.preventDefault();
         hideMessage();
@@ -613,7 +1120,6 @@
         issueOtp();
       });
 
-      // Sign Up Step 2: Verify OTP
       document.getElementById("otpVerifyForm")?.addEventListener("submit", (e) => {
         e.preventDefault();
         const enteredOtp = Array.from(otpInputs).map((i) => i.value).join("");
@@ -636,11 +1142,11 @@
           })
         );
 
-        triggerSuccessGlow();
-        showMessage("Account verified! Redirecting to workspace...", "success");
+        triggerSuccessLaunch();
+        showMessage("Account verified! Launching workspace...", "success");
         setTimeout(() => {
           window.location.href = "dashboard.html";
-        }, 600);
+        }, 650);
       });
 
       document.getElementById("resendOtpBtn")?.addEventListener("click", () => {
@@ -654,7 +1160,6 @@
         hideMessage();
       });
 
-      // Sign In Handler
       document.getElementById("loginForm")?.addEventListener("submit", (e) => {
         e.preventDefault();
         hideMessage();
@@ -683,11 +1188,11 @@
           })
         );
 
-        triggerSuccessGlow();
-        showMessage("Login successful! Redirecting...", "success");
+        triggerSuccessLaunch();
+        showMessage("Login successful! Launching workspace...", "success");
         setTimeout(() => {
           window.location.href = "dashboard.html";
-        }, 450);
+        }, 550);
       });
     });
   </script>
