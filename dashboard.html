@@ -309,8 +309,16 @@
 <body>
 
   <script>
-    // Guard against unauthenticated direct visits
-    if (sessionStorage.getItem("isLoggedIn") !== "true") {
+    // Read session created by index.html (localStorage.jt_session) or sessionStorage fallback
+    let activeSession = null;
+    try {
+      activeSession = JSON.parse(localStorage.getItem("jt_session") || "null");
+    } catch (_) {
+      activeSession = null;
+    }
+
+    const isSessionStorageAuth = sessionStorage.getItem("isLoggedIn") === "true";
+    if (!activeSession && !isSessionStorageAuth) {
       window.location.href = "index.html";
     }
   </script>
@@ -380,9 +388,13 @@
   <div id="toast">Message here</div>
 
   <script>
-    // Display logged-in user
-    const user = sessionStorage.getItem("loggedUser") || "Boss";
-    document.getElementById("userDisplay").textContent = user.charAt(0).toUpperCase() + user.slice(1);
+    // Display logged-in user from jt_session or sessionStorage
+    const user =
+      (activeSession && activeSession.username) ||
+      sessionStorage.getItem("loggedUser") ||
+      "Admin";
+    document.getElementById("userDisplay").textContent =
+      user.charAt(0).toUpperCase() + user.slice(1);
 
     // Helper for pop-up toast messages
     const toast = document.getElementById("toast");
@@ -508,6 +520,7 @@
 
     // Logout
     document.getElementById("logoutBtn").addEventListener("click", () => {
+      localStorage.removeItem("jt_session");
       sessionStorage.clear();
       window.location.href = "index.html";
     });
