@@ -50,15 +50,17 @@
       z-index: 999;
     }
 
-    /* Header */
+    /* Header & Top Navigation */
     header {
-      position: relative;
-      z-index: 10;
+      position: sticky;
+      top: 0;
+      z-index: 50;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 18px 32px;
-      background: rgba(15, 23, 42, 0.75);
+      gap: 16px;
+      padding: 14px 28px;
+      background: rgba(15, 23, 42, 0.85);
       backdrop-filter: blur(14px);
       border-bottom: 1px solid rgba(148, 163, 184, 0.15);
     }
@@ -72,6 +74,8 @@
       display: flex;
       align-items: center;
       gap: 10px;
+      white-space: nowrap;
+      cursor: pointer;
     }
 
     .rocket-icon {
@@ -85,20 +89,55 @@
       50% { transform: translateY(-5px) rotate(8deg); }
     }
 
+    .top-nav {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: #cbd5e1;
+      padding: 8px 13px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .nav-btn:hover {
+      color: #ffffff;
+      background: rgba(30, 41, 59, 0.9);
+      border-color: rgba(148, 163, 184, 0.25);
+    }
+
+    .nav-btn.active {
+      color: #ffffff;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.35), rgba(139, 92, 246, 0.35));
+      border-color: rgba(56, 189, 248, 0.55);
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
+    }
+
     .header-actions {
       display: flex;
-      gap: 12px;
+      gap: 10px;
       align-items: center;
+      flex-shrink: 0;
     }
 
     .btn-pill {
       border: none;
-      padding: 9px 16px;
+      padding: 9px 15px;
       border-radius: 999px;
       font-size: 13px;
       font-weight: 700;
       cursor: pointer;
       transition: transform 0.2s, box-shadow 0.2s;
+      white-space: nowrap;
     }
 
     .btn-pill:hover { transform: translateY(-2px); }
@@ -120,12 +159,49 @@
       color: #fff;
     }
 
+    .menu-toggle-btn {
+      display: none;
+      background: rgba(30, 41, 59, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      color: #f8fafc;
+      padding: 8px 12px;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    @media (max-width: 960px) {
+      header {
+        flex-wrap: wrap;
+        padding: 14px 18px;
+      }
+
+      .menu-toggle-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .top-nav {
+        display: none;
+        width: 100%;
+        order: 4;
+        padding-top: 10px;
+        border-top: 1px solid rgba(148, 163, 184, 0.15);
+      }
+
+      .top-nav.open {
+        display: flex;
+      }
+    }
+
     /* Main Container */
     main {
       position: relative;
       z-index: 10;
       max-width: 1040px;
-      margin: 40px auto;
+      margin: 36px auto;
       padding: 0 24px;
     }
 
@@ -135,8 +211,8 @@
       backdrop-filter: blur(16px);
       border: 1px solid rgba(148, 163, 184, 0.18);
       border-radius: 20px;
-      padding: 36px;
-      margin-bottom: 28px;
+      padding: 32px 36px;
+      margin-bottom: 26px;
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
       transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
@@ -170,7 +246,7 @@
     }
 
     h1 {
-      font-size: 32px;
+      font-size: 30px;
       font-weight: 800;
       margin-bottom: 10px;
       letter-spacing: -0.5px;
@@ -178,9 +254,49 @@
 
     .subtitle {
       color: #cbd5e1;
-      font-size: 16px;
+      font-size: 15.5px;
       line-height: 1.6;
-      max-width: 680px;
+      max-width: 720px;
+    }
+
+    /* Section Panes */
+    .section-pane {
+      display: none;
+    }
+
+    .section-pane.active {
+      display: block;
+    }
+
+    .section-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .section-title {
+      font-size: 21px;
+      font-weight: 800;
+      color: #f8fafc;
+    }
+
+    .back-hq-btn {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      color: #e2e8f0;
+      padding: 7px 13px;
+      border-radius: 9px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .back-hq-btn:hover {
+      border-color: #38bdf8;
+      color: #fff;
     }
 
     /* Interactive Cards Grid */
@@ -191,11 +307,11 @@
     }
 
     .card {
-      background: rgba(30, 41, 59, 0.6);
+      background: rgba(30, 41, 59, 0.65);
       backdrop-filter: blur(14px);
-      border: 1px solid rgba(148, 163, 184, 0.15);
+      border: 1px solid rgba(148, 163, 184, 0.16);
       border-radius: 18px;
-      padding: 26px;
+      padding: 24px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -203,23 +319,23 @@
     }
 
     .card:hover {
-      transform: translateY(-6px);
+      transform: translateY(-5px);
       border-color: rgba(56, 189, 248, 0.5);
     }
 
     .card-emoji {
-      font-size: 36px;
-      margin-bottom: 14px;
+      font-size: 34px;
+      margin-bottom: 12px;
       display: inline-block;
       transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
     }
 
     .card:hover .card-emoji {
-      transform: scale(1.25) rotate(12deg);
+      transform: scale(1.2) rotate(10deg);
     }
 
     .card h2 {
-      font-size: 19px;
+      font-size: 18.5px;
       margin-bottom: 8px;
       color: #f1f5f9;
     }
@@ -228,16 +344,29 @@
       font-size: 14px;
       color: #94a3b8;
       line-height: 1.55;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
+    }
+
+    .meta-tag {
+      display: inline-block;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #7dd3fc;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 3px 9px;
+      border-radius: 999px;
+      margin-bottom: 12px;
+      width: fit-content;
     }
 
     .action-btn {
       width: 100%;
-      padding: 12px;
+      padding: 11px 14px;
       border-radius: 10px;
       border: none;
       font-weight: 700;
-      font-size: 14px;
+      font-size: 13.5px;
       cursor: pointer;
       color: white;
       background: linear-gradient(135deg, #3b82f6, #2563eb);
@@ -249,6 +378,7 @@
 
     .btn-purple { background: linear-gradient(135deg, #8b5cf6, #6d28d9); }
     .btn-danger { background: linear-gradient(135deg, #f43f5e, #e11d48); }
+    .btn-emerald { background: linear-gradient(135deg, #10b981, #059669); }
 
     /* Hilarious Animations Classes */
     .disco-mode {
@@ -332,9 +462,22 @@
   <canvas id="confettiCanvas"></canvas>
 
   <header>
-    <div class="logo">
+    <div class="logo" id="brandHome" title="Return to HQ Overview">
       <span class="rocket-icon">🚀</span> JunctionTeam HQ
     </div>
+
+    <button type="button" class="menu-toggle-btn" id="mobileMenuBtn" aria-expanded="false">
+      ☰ Menu
+    </button>
+
+    <nav class="top-nav" id="topNav" aria-label="Workspace Sections">
+      <button type="button" class="nav-btn" data-section="contact">💬 Contact &amp; Social Group</button>
+      <button type="button" class="nav-btn" data-section="career">💼 Career</button>
+      <button type="button" class="nav-btn" data-section="hr">👥 HR</button>
+      <button type="button" class="nav-btn" data-section="product">📦 Product</button>
+      <button type="button" class="nav-btn active" data-section="entertainment">🎮 Entertainment</button>
+    </nav>
+
     <div class="header-actions">
       <button class="btn-pill btn-party" id="confettiBtn">🎉 Celebrate</button>
       <button class="btn-pill logout-btn" id="logoutBtn">Escape / Logout</button>
@@ -348,183 +491,147 @@
       </div>
       <h1>Welcome inside, <span id="userDisplay" style="color:#38bdf8;">Admin</span>! 😎</h1>
       <p class="subtitle" id="funnyStatus">
-        System scan complete: 0 bugs found, 100% pure awesomeness detected. Warning: Do not press any red buttons unless you are ready for pure chaos.
+        Use the top menu to jump between Contact &amp; Social Group, Career, HR, Product, and Entertainment. Warning: Do not press any red buttons unless you are ready for pure chaos.
       </p>
     </div>
 
-    <div class="grid">
-      <!-- Card 1: Runaway Salary / Bonus Button -->
-      <div class="card">
-        <div>
-          <div class="card-emoji">💸</div>
-          <h2>Instant 500% Salary Hike</h2>
-          <p>Click the button below to immediately approve an unlimited bonus and extra paid vacations.</p>
-        </div>
-        <button class="action-btn" id="runawayBtn">Claim Bonus Now</button>
+    <!-- 1. CONTACT US & SOCIAL GROUP SECTION -->
+    <section class="section-pane" id="sec-contact">
+      <div class="section-header-row">
+        <h2 class="section-title">💬 Contact Us &amp; Social Group</h2>
+        <button type="button" class="back-hq-btn" data-go="entertainment">Go to Entertainment HQ</button>
       </div>
-
-      <!-- Card 2: Barrel Roll & Disco -->
-      <div class="card">
-        <div>
-          <div class="card-emoji">🕺</div>
-          <h2>Emergency Dance Break</h2>
-          <p>Feeling stressed? Activate full-screen RGB party mode and execute an aerodynamic 360° barrel roll.</p>
+      <div class="grid">
+        <div class="card">
+          <div>
+            <span class="meta-tag">COMMUNITY CHANNEL</span>
+            <div class="card-emoji">🌐</div>
+            <h2>JunctionTeam Social Group</h2>
+            <p>Join team announcements, daily shoutouts, UAT release notes, and cross-team discussions in the shared social hub.</p>
+          </div>
+          <button type="button" class="action-btn btn-purple" data-toast="🌐 Opened JunctionTeam Social Group thread (UAT preview).">Open Social Group</button>
         </div>
-        <button class="action-btn btn-purple" id="discoBtn">Activate Disco Mode</button>
-      </div>
 
-      <!-- Card 3: Do Not Press Red Button -->
-      <div class="card">
-        <div>
-          <div class="card-emoji">🚨</div>
-          <h2>The Forbidden Red Button</h2>
-          <p>Seriously, don't touch this. We don't even know what the previous developer wired it to.</p>
+        <div class="card">
+          <div>
+            <span class="meta-tag">DIRECT DESK</span>
+            <div class="card-emoji">📩</div>
+            <h2>Contact Support &amp; Ops</h2>
+            <p>Need quick assistance with portal access, UAT test accounts, or workspace requests? Ping the operations desk.</p>
+          </div>
+          <button type="button" class="action-btn" data-toast="📩 Support ticket note logged for JunctionTeam Ops.">Send Quick Ping</button>
         </div>
-        <button class="action-btn btn-danger" id="panicBtn">DO NOT PRESS</button>
+
+        <div class="card">
+          <div>
+            <span class="meta-tag">TEAM DIRECTORY</span>
+            <div class="card-emoji">📣</div>
+            <h2>Broadcast &amp; Events</h2>
+            <p>Share festive greetings, community polls, and weekly team check-ins with everyone in the group.</p>
+          </div>
+          <button type="button" class="action-btn btn-emerald" data-toast="📣 Community broadcast preview ready!">Create Group Note</button>
+        </div>
       </div>
-    </div>
-  </main>
+    </section>
 
-  <div id="toast">Message here</div>
+    <!-- 2. CAREER SECTION -->
+    <section class="section-pane" id="sec-career">
+      <div class="section-header-row">
+        <h2 class="section-title">💼 Career Section</h2>
+        <button type="button" class="back-hq-btn" data-go="entertainment">Go to Entertainment HQ</button>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div>
+            <span class="meta-tag">OPEN ROLES</span>
+            <div class="card-emoji">🧭</div>
+            <h2>Growth &amp; Internal Openings</h2>
+            <p>Explore role progressions, skill tracks, and cross-functional opportunities across systems, product, and operations.</p>
+          </div>
+          <button type="button" class="action-btn" data-toast="🧭 Career roadmap &amp; role tracks loaded.">View Career Tracks</button>
+        </div>
 
-  <script>
-    // Display logged-in user from jt_session or sessionStorage
-    const user =
-      (activeSession && activeSession.username) ||
-      sessionStorage.getItem("loggedUser") ||
-      "Admin";
-    document.getElementById("userDisplay").textContent =
-      user.charAt(0).toUpperCase() + user.slice(1);
+        <div class="card">
+          <div>
+            <span class="meta-tag">SKILL MATRIX</span>
+            <div class="card-emoji">📚</div>
+            <h2>Learning &amp; Certifications</h2>
+            <p>Track hands-on labs, architecture notes, and technical interview prep milestones in one place.</p>
+          </div>
+          <button type="button" class="action-btn btn-purple" data-toast="📚 Learning checklist synced for your profile.">Open Skill Tracker</button>
+        </div>
 
-    // Helper for pop-up toast messages
-    const toast = document.getElementById("toast");
-    let toastTimer;
-    function showToast(msg) {
-      toast.textContent = msg;
-      toast.classList.add("show");
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => toast.classList.remove("show"), 3200);
-    }
+        <div class="card">
+          <div>
+            <span class="meta-tag">MENTORSHIP</span>
+            <div class="card-emoji">🎯</div>
+            <h2>Career Check-Ins</h2>
+            <p>Prepare talking points, recent wins, and next-quarter goals for your career review sessions.</p>
+          </div>
+          <button type="button" class="action-btn btn-emerald" data-toast="🎯 Career review notes template ready.">Start Goal Note</button>
+        </div>
+      </div>
+    </section>
 
-    // 1. Confetti Cannon Engine
-    const canvas = document.getElementById("confettiCanvas");
-    const ctx = canvas.getContext("2d");
-    let particles = [];
+    <!-- 3. HR SECTION -->
+    <section class="section-pane" id="sec-hr">
+      <div class="section-header-row">
+        <h2 class="section-title">👥 HR Section</h2>
+        <button type="button" class="back-hq-btn" data-go="entertainment">Go to Entertainment HQ</button>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div>
+            <span class="meta-tag">PEOPLE &amp; POLICY</span>
+            <div class="card-emoji">📋</div>
+            <h2>Employee Handbook &amp; Policies</h2>
+            <p>Quick access to leave guidelines, shift schedules, workplace policies, and onboarding checklists.</p>
+          </div>
+          <button type="button" class="action-btn" data-toast="📋 HR policies &amp; guidelines summary opened.">View Policies</button>
+        </div>
 
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-    window.addEventListener("resize", resizeCanvas);
-    resizeCanvas();
+        <div class="card">
+          <div>
+            <span class="meta-tag">ATTENDANCE &amp; LEAVE</span>
+            <div class="card-emoji">🗓️</div>
+            <h2>Leave &amp; Shift Planner</h2>
+            <p>Check upcoming holidays, plan time off, and keep track of shift handovers without guesswork.</p>
+          </div>
+          <button type="button" class="action-btn btn-emerald" data-toast="🗓️ Leave &amp; shift calendar view ready.">Check Planner</button>
+        </div>
 
-    function launchConfetti() {
-      const colors = ["#38bdf8", "#f472b6", "#facc15", "#4ade80", "#a855f7", "#fb7185"];
-      for (let i = 0; i < 130; i++) {
-        particles.push({
-          x: window.innerWidth / 2,
-          y: window.innerHeight / 2,
-          vx: (Math.random() - 0.5) * 22,
-          vy: (Math.random() - 0.7) * 22,
-          size: Math.random() * 8 + 4,
-          color: colors[Math.floor(Math.random() * colors.length)],
-          rotation: Math.random() * 360,
-          vRot: (Math.random() - 0.5) * 12
-        });
-      }
-    }
+        <div class="card">
+          <div>
+            <span class="meta-tag">HELP DESK</span>
+            <div class="card-emoji">🤝</div>
+            <h2>HR Queries &amp; Benefits</h2>
+            <p>Submit HR requests, verify documentation status, or review perks and wellness benefits.</p>
+          </div>
+          <button type="button" class="action-btn btn-purple" data-toast="🤝 HR helpdesk request draft created.">Contact HR Desk</button>
+        </div>
+      </div>
+    </section>
 
-    function animateConfetti() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach((p, idx) => {
-        p.x += p.vx;
-        p.y += p.vy;
-        p.vy += 0.45; // gravity
-        p.rotation += p.vRot;
-        ctx.save();
-        ctx.translate(p.x, p.y);
-        ctx.rotate((p.rotation * Math.PI) / 180);
-        ctx.fillStyle = p.color;
-        ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
-        ctx.restore();
-        if (p.y > canvas.height + 30) particles.splice(idx, 1);
-      });
-      requestAnimationFrame(animateConfetti);
-    }
-    animateConfetti();
+    <!-- 4. PRODUCT SECTION -->
+    <section class="section-pane" id="sec-product">
+      <div class="section-header-row">
+        <h2 class="section-title">📦 Product Section</h2>
+        <button type="button" class="back-hq-btn" data-go="entertainment">Go to Entertainment HQ</button>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div>
+            <span class="meta-tag">UAT &amp; RELEASES</span>
+            <div class="card-emoji">🛠️</div>
+            <h2>JunctionTeam Portal (UAT)</h2>
+            <p>Review current portal builds, login/OTP flows, and user acceptance testing notes before production rollout.</p>
+          </div>
+          <button type="button" class="action-btn" data-toast="🛠️ UAT build status: Portal &amp; HQ active.">Inspect UAT Build</button>
+        </div>
 
-    // Launch welcome confetti right after login!
-    window.addEventListener("load", () => {
-      launchConfetti();
-      showToast("🎉 Access Granted! Welcome to JunctionTeam HQ.");
-    });
-
-    document.getElementById("confettiBtn").addEventListener("click", () => {
-      launchConfetti();
-      showToast("🎊 Confetti deployed! You deserve it.");
-    });
-
-    // 2. Hilarious Runaway Button
-    const runawayBtn = document.getElementById("runawayBtn");
-    const taunts = [
-      "Too slow! 😜",
-      "Nice try, Boss!",
-      "Budget error 404 😂",
-      "Catch me if you can!",
-      "Almost had it! 🏃‍♂️💨"
-    ];
-    let dodgeCount = 0;
-
-    runawayBtn.addEventListener("mouseover", () => {
-      dodgeCount++;
-      const x = (Math.random() - 0.5) * 260;
-      const y = (Math.random() - 0.5) * 180;
-      runawayBtn.style.transform = `translate(${x}px, ${y}px)`;
-      runawayBtn.textContent = taunts[dodgeCount % taunts.length];
-    });
-
-    runawayBtn.addEventListener("click", () => {
-      launchConfetti();
-      runawayBtn.style.transform = "translate(0, 0)";
-      runawayBtn.textContent = "Okay, you win! 🏆";
-      showToast("🤯 Impressive reflexes! Bonus approved in spirit.");
-    });
-
-    // 3. Disco + Barrel Roll
-    document.getElementById("discoBtn").addEventListener("click", () => {
-      const main = document.getElementById("mainContainer");
-      document.body.classList.toggle("disco-mode");
-      main.classList.remove("barrel-roll");
-      void main.offsetWidth; // trigger reflow
-      main.classList.add("barrel-roll");
-      launchConfetti();
-      showToast("🕺 Party protocol initiated!");
-    });
-
-    // 4. Forbidden Red Button (Earthquake + Witty Status)
-    let panicClicks = 0;
-    const panicMessages = [
-      "⚠️ WARNING: You weren't supposed to press that!",
-      "🌋 Seismic activity detected in the server room!",
-      "🤖 Self-destruct cancelled... coffee machine activated instead ☕",
-      "🛑 Stop clicking! Gravity is barely holding this page together!"
-    ];
-
-    document.getElementById("panicBtn").addEventListener("click", () => {
-      document.body.classList.add("earthquake");
-      document.getElementById("funnyStatus").textContent = panicMessages[panicClicks % panicMessages.length];
-      showToast(panicMessages[panicClicks % panicMessages.length]);
-      panicClicks++;
-      setTimeout(() => document.body.classList.remove("earthquake"), 1200);
-    });
-
-    // Logout
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-      localStorage.removeItem("jt_session");
-      sessionStorage.clear();
-      window.location.href = "index.html";
-    });
-  </script>
-
-</body>
-</html>
+        <div class="card">
+          <div>
+            <span class="meta-tag">ROADMAP</span>
+            <div class="card-emoji">🗺️</div>
+            <h2>Feature Pipeline</h2>
+            <p>Track planned enhancements, UI refinements, and upcoming
