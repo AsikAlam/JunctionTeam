@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portal Login</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+      color: #f8fafc;
+      padding: 20px;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 400px;
+      background: rgba(30, 41, 59, 0.75);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(148, 163, 184, 0.15);
+      border-radius: 16px;
+      padding: 36px 32px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    .brand-badge {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 16px rgba(37, 99, 235, 0.3);
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      letter-spacing: -0.3px;
+    }
+
+    p.subtitle {
+      font-size: 14px;
+      color: #94a3b8;
+      margin-bottom: 28px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: #cbd5e1;
+      margin-bottom: 6px;
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 14px;
+      background: rgba(15, 23, 42, 0.65);
+      border: 1px solid #334155;
+      border-radius: 10px;
+      color: #f8fafc;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+
+    .toggle-btn {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: #94a3b8;
+      font-size: 12px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .toggle-btn:hover {
+      color: #f8fafc;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 13px;
+      margin-top: 8px;
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.15s, opacity 0.2s;
+    }
+
+    .btn-submit:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+    }
+
+    .btn-submit:active {
+      transform: translateY(0);
+    }
+
+    .error-msg {
+      display: none;
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #fca5a5;
+      font-size: 13px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .footer-note {
+      margin-top: 22px;
+      text-align: center;
+      font-size: 12px;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-card">
+    <div class="brand-badge">A</div>
+    <h1>Welcome Back</h1>
+    <p class="subtitle">Sign in to access your private workspace</p>
+
+    <div id="errorBox" class="error-msg">Invalid username or password. Please try again.</div>
+
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="username">Username or Email</label>
+        <input type="text" id="username" placeholder="Enter your username" required autocomplete="username" />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="input-wrapper">
+          <input type="password" id="password" placeholder="••••••••" required autocomplete="current-password" />
+          <button type="button" class="toggle-btn" id="togglePwd">SHOW</button>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-submit">Sign In</button>
+    </form>
+
+    <div class="footer-note">Protected Portal &bull; Authorized Access Only</div>
+  </div>
+
+  <script>
+    // Toggle password visibility
+    const pwdInput = document.getElementById("password");
+    const toggleBtn = document.getElementById("togglePwd");
+    toggleBtn.addEventListener("click", () => {
+      const isHidden = pwdInput.type === "password";
+      pwdInput.type = isHidden ? "text" : "password";
+      toggleBtn.textContent = isHidden ? "HIDE" : "SHOW";
+    });
+
+    // Temporary demo credentials (change these anytime)
+    const DEMO_USER = "admin";
+    const DEMO_PASS = "1234";
+
+    document.getElementById("loginForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const user = document.getElementById("username").value.trim();
+      const pass = document.getElementById("password").value;
+      const errorBox = document.getElementById("errorBox");
+
+      if (user === DEMO_USER && pass === DEMO_PASS) {
+        sessionStorage.setItem("isLoggedIn", "true");
+        sessionStorage.setItem("loggedUser", user);
+        window.location.href = "dashboard.html";
+      } else {
+        errorBox.style.display = "block";
+      }
+    });
+  </script>
+
+</body>
+</html>
